@@ -177,7 +177,7 @@ const svg = (name, size = 24, sw = 2) => `<svg width="${size}" height="${size}" 
 
 /* ====== Dane ====== */
 let memCopy = null;
-function blank(){ return { version: 1, concerts: [], settings: { proxyUrl: DEFAULT_PROXY } }; }
+function blank(){ return { version: 1, concerts: [], deleted: [], settings: { proxyUrl: DEFAULT_PROXY }, meta: { dirty: false, lastSync: 0 } }; }
 function normalize(d){
   const out = blank();
   if (d && Array.isArray(d.concerts)) out.concerts = d.concerts.filter(c => c && c.artist && c.date).map(c => ({
@@ -185,15 +185,101 @@ function normalize(d){
     venue: c.venue || '', city: c.city || '', country: c.country || '', tour: c.tour || '',
     festival: !!c.festival, rating: Math.max(0, Math.min(5, Number(c.rating) || 0)), note: c.note || '',
     songs: Array.isArray(c.songs) ? c.songs.filter(s => s && s.name).map(s => ({ name: String(s.name), encore: !!s.encore })) : [],
-    url: c.url || '', source: c.source || 'manual', addedAt: c.addedAt || Date.now()
+    url: c.url || '', source: c.source || 'manual', addedAt: c.addedAt || Date.now(), mod: c.mod || c.addedAt || 0
   }));
+  if (d && Array.isArray(d.deleted)) out.deleted = d.deleted.filter(x => x && x.id).map(x => ({ id: String(x.id), at: Number(x.at) || 0 }));
   if (d && d.settings && d.settings.proxyUrl) out.settings.proxyUrl = d.settings.proxyUrl;
+  if (d && d.meta) out.meta = { dirty: !!d.meta.dirty, lastSync: Number(d.meta.lastSync) || 0 };
   return out;
 }
 function load(){ try { const r = localStorage.getItem(KEY); if (r) return normalize(JSON.parse(r)); } catch (e) {} return memCopy || blank(); }
 let db = load();
 let storageOk = true;
 function save(){ memCopy = db; try { localStorage.setItem(KEY, JSON.stringify(db)); storageOk = true; } catch (e) { storageOk = false; } }
+/* ====== Konto i synchronizacja ====== */
+const AUTH_KEY = 'gigbook.auth';
+let authMem = null;
+function loadAuth(){ try { const r = localStorage.getItem(AUTH_KEY); if (r) return JSON.parse(r); } catch (e) {} return authMem; }
+function saveAuth(){ authMem = auth; try { if (auth) localStorage.setItem(AUTH_KEY, JSON.stringify(auth)); else localStorage.removeItem(AUTH_KEY); } catch (e) {} }
+let auth = loadAuth();
+let changeSeq = 0, syncT = null, syncing = false, syncErr = '';
+const touch = c => { c.mod = Date.now(); };
+function changed(){ db.meta.dirty = true; changeSeq++; save(); if (auth) { clearTimeout(syncT); syncT = setTimeout(sync, 3000); } }
+function apiBase(){ return (db.settings.proxyUrl || DEFAULT_PROXY).trim().replace(/\/+$/, ''); }
+async function api(path, method = 'GET', body){
+  const h = { Accept: 'application/json' };
+  if (body) h['Content-Type'] = 'application/json';
+  if (auth) h.Authorization = 'Bearer ' + auth.token;
+  let r;
+  try { r = await fetch(apiBase() + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined }); }
+  catch (e) { const err = new Error('Brak połączenia z serwerem.'); err.status = 0; throw err; }
+  let j = null; try { j = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((j && j.error) || ('Błąd serwera (' + r.status + ').')); err.status = r.status; throw err; }
+  return j;
+}
+const sig = d => d.concerts.map(c => c.id + ':' + (c.mod || 0)).sort().join('|') + '#' + (d.deleted || []).length;
+function merge(a, b){
+  const del = new Map();
+  [...(a.deleted || []), ...(b.deleted || [])].forEach(x => { if (!del.has(x.id) || del.get(x.id) < x.at) del.set(x.id, x.at); });
+  const m = new Map();
+  [...a.concerts, ...b.concerts].forEach(c => { const cur = m.get(c.id); if (!cur || (c.mod || 0) > (cur.mod || 0)) m.set(c.id, c); });
+  let concerts = [...m.values()].filter(c => !(del.has(c.id) && del.get(c.id) >= (c.mod || 0)));
+  const bySl = new Map();
+  concerts.forEach(c => { if (!c.setlistId) return; const cur = bySl.get(c.setlistId); if (!cur || c.id < cur.id) bySl.set(c.setlistId, c); });
+  concerts = concerts.filter(c => !c.setlistId || bySl.get(c.setlistId) === c);
+  return { concerts, deleted: [...del].map(([id, at]) => ({ id, at })) };
+}
+async function sync(){
+  if (!auth || syncing) return;
+  syncing = true; clearTimeout(syncT);
+  const seq = changeSeq, before = sig(db);
+  try {
+    const r = await api('/data');
+    const remote = r && r.data ? normalize(r.data) : null;
+    const merged = remote ? merge(db, remote) : { concerts: db.concerts, deleted: db.deleted };
+    db.concerts = merged.concerts; db.deleted = merged.deleted;
+    if (!remote || db.meta.dirty || sig(db) !== sig(remote)) {
+      await api('/data', 'PUT', { data: { version: 1, concerts: db.concerts, deleted: db.deleted } });
+    }
+    if (changeSeq === seq) db.meta.dirty = false; else syncT = setTimeout(sync, 1500);
+    db.meta.lastSync = Date.now(); syncErr = ''; save();
+  } catch (e) {
+    syncErr = e.message;
+    if (e.status === 401) { auth = null; saveAuth(); toast('Sesja wygasła – zaloguj się ponownie w Ustawieniach.'); }
+  } finally {
+    syncing = false;
+    const a = document.activeElement, typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA');
+    if (!typing && (sig(db) !== before || ui.view === 'settings')) render();
+  }
+}
+async function doAuth(mode, u, p){
+  const el = document.getElementById('accerr');
+  const show = m => { if (el) el.textContent = m; };
+  if (!u || !p) return show('Wpisz nick i hasło.');
+  show(''); ui.authBusy = true; render();
+  try {
+    const r = await api('/auth/' + mode, 'POST', { username: u, password: p });
+    auth = { u: r.username, token: r.token }; saveAuth();
+    if (db.concerts.length) db.meta.dirty = true;
+    ui.authBusy = false;
+    await sync();
+    ui.year = null; render();
+    toast(mode === 'register' ? 'Konto założone! Koncerty zapisują się teraz w chmurze.' : `Cześć, ${auth.u}! Koncerty zsynchronizowane.`);
+  } catch (e) {
+    ui.authBusy = false; ui.authErr = e.status === 0 ? 'Brak internetu albo serwer nie odpowiada.' : e.message; render();
+  }
+}
+async function logout(force){
+  if (db.meta.dirty && !force) {
+    await sync();
+    if (db.meta.dirty) { ui.logoutArm = true; render(); return; }
+  }
+  auth = null; saveAuth();
+  const keep = db.settings; db = blank(); db.settings = keep; save();
+  ui.logoutArm = false; ui.year = null; syncErr = ''; render(); toast('Wylogowano. Twoje koncerty czekają w chmurze.');
+}
+function timeAgo(t){ if (!t) return 'jeszcze nie'; const s = Math.round((Date.now() - t) / 1000); if (s < 60) return 'przed chwilą'; if (s < 3600) return Math.round(s / 60) + ' min temu'; if (s < 86400) return Math.round(s / 3600) + ' godz. temu'; return fmtShort(new Date(t).toISOString().slice(0, 10)); }
+
 const sorted = () => [...db.concerts].sort((a, b) => b.date.localeCompare(a.date) || b.addedAt - a.addedAt);
 const years = () => [...new Set(db.concerts.map(c => parts(c.date).y))].sort((a, b) => b - a);
 const inYear = (list, y) => y === 'all' ? list : list.filter(c => parts(c.date).y === y);
@@ -310,9 +396,13 @@ function vList(){
     h += `<div class="empty"><div style="color:var(--accent)">${svg('skull', 64, 1.5)}</div><h1>Pusto pod sceną</h1>
       <p>Dodaj koncert, na którym byłeś. Gigbook zapamięta setlistę, policzy osiągnięcia i na koniec roku zrobi Twój Wrapped.</p>
       <button class="btn" data-a="add">${svg('plus', 20)} Dodaj pierwszy koncert</button>
+      ${auth ? '' : '<button class="btn ghost small" data-a="go" data-v="settings">Mam już konto – zaloguj się</button>'}
       <button class="btn ghost small" data-a="demo">Wczytaj przykładowe dane</button></div>`;
     return h + nav();
   }
+  if (!auth && !ui.bannerOff) h += `<div class="card" style="margin:16px 20px 0;padding:14px;display:flex;flex-direction:column;gap:10px;border-color:var(--accent)">
+    <div style="font-size:14px;line-height:1.5;color:var(--text2)"><b style="color:var(--text)">Koncerty są tylko na tym telefonie.</b> Załóż konto, a zapiszą się w chmurze – nie przepadną przy zmianie telefonu.</div>
+    <div style="display:flex;gap:8px"><button class="btn small" style="flex:1" data-a="go" data-v="settings">Załóż konto</button><button class="btn ghost small" style="flex:0 0 auto;width:auto;padding:0 16px" data-a="banneroff">Później</button></div></div>`;
   const cities = countBy(list, c => c.city.trim().toLowerCase()).size;
   const arts = countBy(list, c => c.artist.trim().toLowerCase()).size;
   h += `<div class="card stats">
@@ -462,8 +552,27 @@ function vWrap(){
 function vSettings(){
   const json = JSON.stringify(db, null, 2);
   let h = `<div class="top back"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button><h1>Ustawienia</h1></div><div class="pad">
-    <div class="sect">Kopia zapasowa</div>
-    <p class="muted" style="margin:0;font-size:14px;line-height:1.5">Dane są zapisane tylko na tym urządzeniu. Rób kopię co jakiś czas: plik zachowaj w iCloud lub na Dysku Google.${storageOk ? '' : ' <b class="err">Uwaga: ta przeglądarka nie pozwala na trwały zapis – zrób kopię przed zamknięciem!</b>'}</p>
+    <div class="sect">Konto</div>`;
+  if (auth) {
+    h += `<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:6px">
+      <div style="font-family:var(--head);font-weight:600;font-size:20px;text-transform:uppercase">${esc(auth.u)}</div>
+      <div class="small muted">${syncing ? 'Synchronizuję…' : syncErr ? '<span class="err">' + esc(syncErr) + ' Zmiany są bezpieczne na telefonie – wyślę je, gdy wróci połączenie.</span>' : (db.meta.dirty ? 'Zmiany czekają na wysłanie…' : 'Wszystko zapisane w chmurze · ' + timeAgo(db.meta.lastSync))}</div></div>
+      <button class="btn ghost small" data-a="syncnow">Synchronizuj teraz</button>
+      ${ui.logoutArm ? `<p class="err" style="margin:0">Nie udało się wysłać ostatnich zmian. Po wylogowaniu przepadną.</p><button class="btn danger small" data-a="logoutforce">Wyloguj mimo to</button><button class="btn ghost small" data-a="logoutno">Anuluj</button>`
+        : `<button class="btn ghost small" data-a="logout">Wyloguj</button>`}`;
+  } else {
+    h += `<p class="muted" style="margin:0;font-size:14px;line-height:1.5">Z kontem koncerty zapisują się automatycznie w chmurze. Zalogujesz się na nowym telefonie i wszystko będzie na miejscu. Nie używaj tu tego samego hasła co do maila czy banku.</p>
+      <form id="accform" style="display:flex;flex-direction:column;gap:12px">
+      <div class="field"><label for="acc_u">Nick</label><input class="inp" id="acc_u" value="${esc(ui.accU || '')}" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="24" placeholder="np. wujek_marek"></div>
+      <div class="field"><label for="acc_p">Hasło (min. 6 znaków)</label><input class="inp" id="acc_p" type="password" autocomplete="current-password" maxlength="200"></div>
+      <div id="accerr" class="err" role="alert">${esc(ui.authErr || '')}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button class="btn small" type="submit" value="login" ${ui.authBusy ? 'disabled' : ''}>Zaloguj</button>
+        <button class="btn ghost small" type="submit" value="register" ${ui.authBusy ? 'disabled' : ''}>Załóż konto</button></div>
+      ${ui.authBusy ? '<p class="muted small" style="margin:0">Łączę…</p>' : ''}</form>`;
+  }
+  h += `<div class="sect" style="margin-top:12px">Kopia zapasowa</div>
+    <p class="muted" style="margin:0;font-size:14px;line-height:1.5">${auth ? 'Masz konto, więc kopia nie jest konieczna – ale plik też nie zaszkodzi.' : 'Bez konta dane są tylko na tym urządzeniu. Rób kopię co jakiś czas: plik zachowaj w iCloud lub na Dysku Google.'}${storageOk ? '' : ' <b class="err">Uwaga: ta przeglądarka nie pozwala na trwały zapis – zrób kopię przed zamknięciem!</b>'}</p>
     <button class="btn small" data-a="export">Pobierz kopię (plik .json)</button>
     <button class="btn ghost small" data-a="copyjson">Skopiuj kopię do schowka</button>
     <div class="field"><label for="impfile">Przywróć z pliku</label><input type="file" id="impfile" accept=".json,application/json" class="inp" style="padding-top:12px"></div>
@@ -501,7 +610,7 @@ function importData(txt){
   const ids = new Set(db.concerts.map(c => c.id)), sids = new Set(db.concerts.map(c => c.setlistId).filter(Boolean));
   let added = 0; n.concerts.forEach(c => { if (ids.has(c.id) || (c.setlistId && sids.has(c.setlistId))) return; db.concerts.push(c); added++; });
   if (!db.settings.proxyUrl && n.settings.proxyUrl) db.settings.proxyUrl = n.settings.proxyUrl;
-  save(); ui.year = null; render(); toast(`Przywrócono ${added} ${pl(added, 'koncert', 'koncerty', 'koncertów')}.`);
+  changed(); ui.year = null; render(); toast(`Przywrócono ${added} ${pl(added, 'koncert', 'koncerty', 'koncertów')}.`);
 }
 
 const DEMO = [
@@ -515,8 +624,8 @@ const DEMO = [
 ];
 function loadDemo(){
   DEMO.forEach(([artist, date, venue, city, country, rating, festival, songs], i) => db.concerts.push({ id: uid() + i, setlistId: '', artist, date, venue, city, country, tour: '', festival, rating, note: '',
-    songs: songs.map(s => ({ name: s.replace(/^\|/, ''), encore: s.startsWith('|') })), url: '', source: 'demo', addedAt: Date.now() + i }));
-  save(); ui.year = null; render(); toast('Wczytano przykładowe koncerty. Usuniesz je w Ustawieniach.');
+    songs: songs.map(s => ({ name: s.replace(/^\|/, ''), encore: s.startsWith('|') })), url: '', source: 'demo', addedAt: Date.now() + i, mod: Date.now() + i }));
+  changed(); ui.year = null; render(); toast('Wczytano przykładowe koncerty. Usuniesz je w Ustawieniach.');
 }
 
 /* ====== Akcje ====== */
@@ -531,14 +640,14 @@ const A = {
   mode: v => { ui.addMode = v; if (ui.view !== 'add') go('add'); else render(); },
   open: v => go('detail', { id: v }),
   edit: () => { const c = byId(ui.id); ui.form = { ...c, songsText: songsToText(c.songs) }; ui.addMode = 'man'; go('add'); },
-  rate: v => { const c = byId(ui.id); const n = Number(v); c.rating = c.rating === n ? n - 1 : n; save(); render(); },
+  rate: v => { const c = byId(ui.id); const n = Number(v); c.rating = c.rating === n ? n - 1 : n; touch(c); changed(); render(); },
   delask: () => { ui.delArm = true; render(); },
   delno: () => { ui.delArm = false; render(); },
-  delyes: () => { db.concerts = db.concerts.filter(c => c.id !== ui.id); save(); toast('Koncert usunięty.'); go('list'); },
+  delyes: () => { db.concerts = db.concerts.filter(c => c.id !== ui.id); db.deleted.push({ id: ui.id, at: Date.now() }); changed(); toast('Koncert usunięty.'); go('list'); },
   pick: v => { ui.sf.selected = Number(v); render(); },
   more: () => search(ui.sf.page + 1),
   addpicked: () => { const r = ui.sf.results[ui.sf.selected]; if (!r) return;
-    const c = { id: uid(), ...r, festival: false, rating: 0, note: '', source: 'setlistfm', addedAt: Date.now() }; db.concerts.push(c); save();
+    const c = { id: uid(), ...r, festival: false, rating: 0, note: '', source: 'setlistfm', addedAt: Date.now(), mod: Date.now() }; db.concerts.push(c); changed();
     ui.sf.selected = null; ui.year = parts(c.date).y; toast('Dodano do kolekcji!'); ui.backTo = 'list'; go('detail', { id: c.id }); },
   share: async () => { const w = wrapped(ui.wYear);
     const txt = `Mój rok pod sceną ${ui.wYear}: ${w.n} ${pl(w.n, 'koncert', 'koncerty', 'koncertów')}, ${w.songsTotal} ${pl(w.songsTotal, 'utwór', 'utwory', 'utworów')} na żywo, ${w.artists} ${pl(w.artists, 'zespół', 'zespoły', 'zespołów')}.` + (w.topA[0] ? ` Numer 1: ${w.topA[0][0]} (${w.topA[0][1]}×).` : '') + ' #Gigbook';
@@ -549,14 +658,20 @@ const A = {
   importtext: () => { const t = document.getElementById('imptext').value.trim(); if (t) importData(t); },
   saveproxy: () => { const v = document.getElementById('proxy').value.trim(); if (v && !/^https:\/\//i.test(v)) { toast('Adres musi zaczynać się od https://'); return; } db.settings.proxyUrl = v; save(); toast(v ? 'Zapisano adres pośrednika.' : 'Usunięto adres pośrednika.'); },
   clearask: () => { ui.clearArm = true; render(); },
+  banneroff: () => { ui.bannerOff = true; render(); },
+  syncnow: () => { syncErr = ''; sync(); render(); },
+  logout: () => logout(false),
+  logoutforce: () => logout(true),
+  logoutno: () => { ui.logoutArm = false; render(); },
   clearno: () => { ui.clearArm = false; render(); },
-  clearyes: () => { db.concerts = []; save(); ui.clearArm = false; ui.year = null; toast('Usunięto wszystkie koncerty.'); render(); }
+  clearyes: () => { const now = Date.now(); db.concerts.forEach(c => db.deleted.push({ id: c.id, at: now })); db.concerts = []; changed(); ui.clearArm = false; ui.year = null; toast('Usunięto wszystkie koncerty.'); render(); }
 };
 app.addEventListener('click', e => { const t = e.target.closest('[data-a]'); if (!t || t.disabled) return; e.preventDefault(); const f = A[t.dataset.a]; if (f) f(t.dataset.v, t); });
 let noteT;
 app.addEventListener('input', e => {
   const t = e.target;
-  if (t.id === 'note') { const c = byId(ui.id); if (c) { c.note = t.value; clearTimeout(noteT); noteT = setTimeout(save, 400); } }
+  if (t.id === 'note') { const c = byId(ui.id); if (c) { c.note = t.value; touch(c); clearTimeout(noteT); noteT = setTimeout(changed, 600); } }
+  if (t.id === 'acc_u') ui.accU = t.value;
   if (t.id === 'sf_q') ui.sf.q = t.value;
   if (t.id === 'sf_y') ui.sf.year = t.value;
 });
@@ -566,18 +681,22 @@ app.addEventListener('change', e => {
 app.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id === 'sfform') { search(1); return; }
+  if (e.target.id === 'accform') { const mode = (e.submitter && e.submitter.value) || 'login'; ui.authErr = ''; doAuth(mode, document.getElementById('acc_u').value.trim(), document.getElementById('acc_p').value); return; }
   if (e.target.id === 'gigform') {
     const g = id => document.getElementById('f_' + id).value.trim();
     const artist = g('artist'), date = g('date');
     if (!artist || !/^\d{4}-\d{2}-\d{2}$/.test(date)) { document.getElementById('formerr').textContent = 'Podaj zespół i datę.'; return; }
     const data = { artist, date, venue: g('venue'), city: g('city'), country: g('country').toUpperCase(), tour: g('tour'), festival: document.getElementById('f_fest').checked, songs: textToSongs(document.getElementById('f_songs').value) };
     let c;
-    if (ui.form && ui.form.id) { c = byId(ui.form.id); Object.assign(c, data); toast('Zapisano zmiany.'); }
-    else { c = { id: uid(), setlistId: '', rating: 0, note: '', url: '', source: 'manual', addedAt: Date.now(), ...data }; db.concerts.push(c); toast('Dodano do kolekcji!'); }
-    save(); ui.form = null; ui.year = parts(c.date).y; ui.backTo = 'list'; go('detail', { id: c.id });
+    if (ui.form && ui.form.id) { c = byId(ui.form.id); Object.assign(c, data); touch(c); toast('Zapisano zmiany.'); }
+    else { c = { id: uid(), setlistId: '', rating: 0, note: '', url: '', source: 'manual', addedAt: Date.now(), mod: Date.now(), ...data }; db.concerts.push(c); toast('Dodano do kolekcji!'); }
+    changed(); ui.form = null; ui.year = parts(c.date).y; ui.backTo = 'list'; go('detail', { id: c.id });
   }
 });
 window.addEventListener('pagehide', save);
+window.addEventListener('online', () => { if (auth) sync(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && auth) sync(); });
+if (auth) setTimeout(sync, 300);
 if ('serviceWorker' in navigator && location.protocol === 'https:') { try { navigator.serviceWorker.register('./sw.js').catch(() => {}); } catch (e) {} }
 render();
 </script>
