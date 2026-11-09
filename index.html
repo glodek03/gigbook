@@ -55,7 +55,7 @@ h1.big{font-weight:700;font-size:32px}
 .tag.acc{background:var(--accent);border-color:var(--accent);color:#fff}
 .fab{position:fixed;right:max(20px,calc(50vw - 220px));bottom:calc(96px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:30px;background:var(--accent);color:#fff;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.6);cursor:pointer}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
-nav.tabs div{max-width:480px;margin:0 auto;height:68px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+nav.tabs div{max-width:480px;margin:0 auto;height:68px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 nav.tabs button{background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--muted);cursor:pointer;font-size:11px}
 nav.tabs button.on{color:var(--accent)}
 nav.tabs button.on span{color:var(--text);font-weight:600}
@@ -121,6 +121,32 @@ textarea.inp{height:auto;min-height:120px;padding:12px 14px;line-height:1.5;resi
 .check{display:flex;align-items:center;gap:10px;font-size:15px;min-height:44px;cursor:pointer}
 .check input{width:22px;height:22px;accent-color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+.slides{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;gap:16px;padding:calc(14px + env(safe-area-inset-top)) 24px calc(18px + env(safe-area-inset-bottom));max-width:480px;margin:0 auto}
+.sbar{display:flex;gap:4px;position:relative;z-index:3;padding-right:48px}.sbar i{flex:1;height:3px;border-radius:2px;background:#3F3F46}.sbar i.on{background:var(--text)}
+.sclose{position:absolute;right:12px;top:calc(2px + env(safe-area-inset-top));z-index:4}
+.snav{position:absolute;top:70px;bottom:110px;background:transparent;border:none;z-index:2;cursor:pointer}.snav.prev{left:0;width:35%}.snav.next{right:0;width:65%}
+.sbody{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;position:relative;z-index:1;min-height:0}
+.sfoot{position:relative;z-index:3}
+.skick{font-family:var(--head);font-weight:500;font-size:15px;letter-spacing:4px;color:var(--muted);text-transform:uppercase}
+.sbig{font-family:var(--head);font-weight:700;line-height:1.02;text-transform:uppercase;word-break:break-word}
+.sbig.year{font-family:var(--logo);color:var(--accent);text-transform:none;font-weight:400}
+.stitle{font-family:var(--head);font-weight:600;font-size:24px;text-transform:uppercase;line-height:1.15}
+.sstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px}
+.ph{aspect-ratio:1;border-radius:8px;background:var(--surface);border:1px solid var(--line);padding:0;overflow:hidden;position:relative;cursor:pointer}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+.ph .tag{position:absolute;left:6px;bottom:6px;margin:0;background:rgba(11,11,12,.8)}
+.phadd{aspect-ratio:1;border-radius:8px;border:1px dashed #52525B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--text2);font-size:12px;cursor:pointer}
+.viewer{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:60;display:flex;flex-direction:column;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom))}
+.viewer img{flex:1;min-height:0;object-fit:contain;width:100%}
+.linkchip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:14px;font-weight:500;cursor:pointer;align-self:flex-start;margin-top:6px}
+#map{height:46vh;min-height:280px;margin:16px 20px 0;border-radius:12px;border:1px solid var(--line);overflow:hidden;background:#111}
+.leaflet-container{background:#111!important;font-family:var(--body)}
+.leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.82) contrast(.95) saturate(.35)}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#161618!important;color:#F2F2F2!important}
+.leaflet-popup-content{margin:12px 14px!important;font:500 13px var(--body)}
+.leaflet-popup-content button.l{display:block;background:none;border:none;color:#F2F2F2;padding:5px 0;text-align:left;cursor:pointer;font:500 13px var(--body);text-decoration:underline;text-decoration-color:#52525B}
+.leaflet-control-attribution{background:rgba(11,11,12,.75)!important;color:#A1A1AA!important}.leaflet-control-attribution a{color:#D4D4D8!important}
+.leaflet-container a.leaflet-popup-close-button{color:#A1A1AA}
 </style>
 </head>
 <body>
@@ -134,6 +160,9 @@ const MG = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sie
 const MN = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
 const DN = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
 const HOME = ['PL','POLSKA','POLAND'];
+const COUNTRIES = [['', 'Wszystkie kraje'], ['PL', 'Polska'], ['CZ', 'Czechy'], ['DE', 'Niemcy'], ['SK', 'Słowacja'], ['AT', 'Austria'], ['HU', 'Węgry'], ['LT', 'Litwa'],
+  ['NL', 'Holandia'], ['BE', 'Belgia'], ['FR', 'Francja'], ['GB', 'Wielka Brytania'], ['DK', 'Dania'], ['SE', 'Szwecja'], ['NO', 'Norwegia'], ['FI', 'Finlandia'],
+  ['CH', 'Szwajcaria'], ['IT', 'Włochy'], ['ES', 'Hiszpania'], ['PT', 'Portugalia'], ['HR', 'Chorwacja'], ['SI', 'Słowenia'], ['UA', 'Ukraina'], ['US', 'USA']];
 const DEFAULT_PROXY = 'https://gigbook-proxy.glodek300.workers.dev';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -171,13 +200,19 @@ const ICON = {
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   skull:'<path d="M12 3a8 8 0 00-8 8c0 3 1.5 4.5 3 5.5V20h10v-3.5c1.5-1 3-2.5 3-5.5a8 8 0 00-8-8z"/><circle cx="9" cy="11" r="1.6"/><circle cx="15" cy="11" r="1.6"/><path d="M10 20v-2M14 20v-2"/>',
   pen:'<path d="M4 20h4L19 9l-4-4L4 16v4z"/>',
-  crown:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5L3 8z"/>'
+  crown:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5L3 8z"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 016 4.8"/>',
+  refresh:'<path d="M20 11a8 8 0 10-2.3 5.7"/><path d="M20 4v7h-7"/>',
+  camera:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  ticket:'<path d="M3 7h18v3a2 2 0 000 4v3H3v-3a2 2 0 000-4z"/><path d="M14 7v10" stroke-dasharray="2 2"/>',
+  play:'<path d="M7 4l13 8-13 8z"/>',
+  chev:'<path d="M9 5l7 7-7 7"/>'
 };
 const svg = (name, size = 24, sw = 2) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name] || ''}</svg>`;
 
 /* ====== Dane ====== */
 let memCopy = null;
-function blank(){ return { version: 1, concerts: [], deleted: [], settings: { proxyUrl: DEFAULT_PROXY }, meta: { dirty: false, lastSync: 0 } }; }
+function blank(){ return { version: 1, concerts: [], plans: [], deleted: [], settings: { proxyUrl: DEFAULT_PROXY }, meta: { dirty: false, lastSync: 0 } }; }
 function normalize(d){
   const out = blank();
   if (d && Array.isArray(d.concerts)) out.concerts = d.concerts.filter(c => c && c.artist && c.date).map(c => ({
@@ -185,8 +220,14 @@ function normalize(d){
     venue: c.venue || '', city: c.city || '', country: c.country || '', tour: c.tour || '',
     festival: !!c.festival, rating: Math.max(0, Math.min(5, Number(c.rating) || 0)), note: c.note || '',
     songs: Array.isArray(c.songs) ? c.songs.filter(s => s && s.name).map(s => ({ name: String(s.name), encore: !!s.encore })) : [],
-    url: c.url || '', source: c.source || 'manual', addedAt: c.addedAt || Date.now(), mod: c.mod || c.addedAt || 0
+    url: c.url || '', source: c.source || 'manual', addedAt: c.addedAt || Date.now(), mod: c.mod || c.addedAt || 0,
+    mbid: c.mbid || '', lat: typeof c.lat === 'number' ? c.lat : null, lng: typeof c.lng === 'number' ? c.lng : null, countryName: c.countryName || '',
+    photos: Array.isArray(c.photos) ? c.photos.filter(x => x && x.id).map(x => ({ id: String(x.id), kind: x.kind === 'ticket' ? 'ticket' : 'photo', up: !!x.up })) : [],
+    rare: c.rare && typeof c.rare === 'object' ? { shows: Number(c.rare.shows) || 0, scope: c.rare.scope || '', songs: c.rare.songs && typeof c.rare.songs === 'object' ? c.rare.songs : {}, at: Number(c.rare.at) || 0 } : null
   }));
+  if (d && Array.isArray(d.plans)) out.plans = d.plans.filter(x => x && x.id && x.artist && x.date).map(x => ({
+    id: String(x.id), setlistId: x.setlistId || '', artist: String(x.artist), date: String(x.date), venue: x.venue || '', city: x.city || '', country: x.country || '',
+    mbid: x.mbid || '', url: x.url || '', mod: Number(x.mod) || 0 }));
   if (d && Array.isArray(d.deleted)) out.deleted = d.deleted.filter(x => x && x.id).map(x => ({ id: String(x.id), at: Number(x.at) || 0 }));
   if (d && d.settings && d.settings.proxyUrl) out.settings.proxyUrl = d.settings.proxyUrl;
   if (d && d.meta) out.meta = { dirty: !!d.meta.dirty, lastSync: Number(d.meta.lastSync) || 0 };
@@ -205,7 +246,7 @@ let auth = loadAuth();
 let changeSeq = 0, syncT = null, syncing = false, syncErr = '';
 const touch = c => { c.mod = Date.now(); };
 function changed(){ db.meta.dirty = true; changeSeq++; save(); if (auth) { clearTimeout(syncT); syncT = setTimeout(sync, 3000); } }
-function apiBase(){ return (db.settings.proxyUrl || DEFAULT_PROXY).trim().replace(/\/+$/, ''); }
+function apiBase(){ return DEFAULT_PROXY; }
 async function api(path, method = 'GET', body){
   const h = { Accept: 'application/json' };
   if (body) h['Content-Type'] = 'application/json';
@@ -217,17 +258,17 @@ async function api(path, method = 'GET', body){
   if (!r.ok) { const err = new Error((j && j.error) || ('Błąd serwera (' + r.status + ').')); err.status = r.status; throw err; }
   return j;
 }
-const sig = d => d.concerts.map(c => c.id + ':' + (c.mod || 0)).sort().join('|') + '#' + (d.deleted || []).length;
+const sig = d => [...d.concerts, ...(d.plans || [])].map(c => c.id + ':' + (c.mod || 0)).sort().join('|') + '#' + (d.deleted || []).length;
 function merge(a, b){
   const del = new Map();
   [...(a.deleted || []), ...(b.deleted || [])].forEach(x => { if (!del.has(x.id) || del.get(x.id) < x.at) del.set(x.id, x.at); });
-  const m = new Map();
-  [...a.concerts, ...b.concerts].forEach(c => { const cur = m.get(c.id); if (!cur || (c.mod || 0) > (cur.mod || 0)) m.set(c.id, c); });
-  let concerts = [...m.values()].filter(c => !(del.has(c.id) && del.get(c.id) >= (c.mod || 0)));
+  const pick = (x, y) => { const m = new Map(); [...(x || []), ...(y || [])].forEach(c => { const cur = m.get(c.id); if (!cur || (c.mod || 0) > (cur.mod || 0)) m.set(c.id, c); }); return [...m.values()].filter(c => !(del.has(c.id) && del.get(c.id) >= (c.mod || 0))); };
+  let concerts = pick(a.concerts, b.concerts);
+  const plans = pick(a.plans, b.plans);
   const bySl = new Map();
   concerts.forEach(c => { if (!c.setlistId) return; const cur = bySl.get(c.setlistId); if (!cur || c.id < cur.id) bySl.set(c.setlistId, c); });
   concerts = concerts.filter(c => !c.setlistId || bySl.get(c.setlistId) === c);
-  return { concerts, deleted: [...del].map(([id, at]) => ({ id, at })) };
+  return { concerts, plans, deleted: [...del].map(([id, at]) => ({ id, at })) };
 }
 async function sync(){
   if (!auth || syncing) return;
@@ -236,13 +277,14 @@ async function sync(){
   try {
     const r = await api('/data');
     const remote = r && r.data ? normalize(r.data) : null;
-    const merged = remote ? merge(db, remote) : { concerts: db.concerts, deleted: db.deleted };
-    db.concerts = merged.concerts; db.deleted = merged.deleted;
+    const merged = remote ? merge(db, remote) : { concerts: db.concerts, plans: db.plans, deleted: db.deleted };
+    db.concerts = merged.concerts; db.plans = merged.plans; db.deleted = merged.deleted;
     if (!remote || db.meta.dirty || sig(db) !== sig(remote)) {
-      await api('/data', 'PUT', { data: { version: 1, concerts: db.concerts, deleted: db.deleted } });
+      await api('/data', 'PUT', { data: { version: 1, concerts: db.concerts, plans: db.plans, deleted: db.deleted } });
     }
     if (changeSeq === seq) db.meta.dirty = false; else syncT = setTimeout(sync, 1500);
     db.meta.lastSync = Date.now(); syncErr = ''; save();
+    pushPhotos(); loadFriends();
   } catch (e) {
     syncErr = e.message;
     if (e.status === 401) { auth = null; saveAuth(); toast('Sesja wygasła – zaloguj się ponownie w Ustawieniach.'); }
@@ -274,7 +316,7 @@ async function logout(force){
     await sync();
     if (db.meta.dirty) { ui.logoutArm = true; render(); return; }
   }
-  auth = null; saveAuth();
+  auth = null; saveAuth(); fr.loaded = false; fr.friends = []; fr.requests = []; fr.data = {};
   const keep = db.settings; db = blank(); db.settings = keep; save();
   ui.logoutArm = false; ui.year = null; syncErr = ''; render(); toast('Wylogowano. Twoje koncerty czekają w chmurze.');
 }
@@ -287,8 +329,8 @@ const byId = id => db.concerts.find(c => c.id === id);
 
 /* ====== Stan interfejsu ====== */
 const ui = {
-  view: 'list', year: null, id: null, addMode: 'sf', form: null, delArm: false, clearArm: false,
-  sf: { q: '', year: '', page: 1, results: [], total: 0, loading: false, error: '', selected: null, searched: false },
+  view: 'list', hist: [], mYear: 'all', year: null, id: null, form: null, delArm: false, clearArm: false,
+  sf: { tab: 'day', dayOff: new Date().getHours() < 14 ? 1 : 0, dayDate: '', dayCountry: 'PL', showUp: false, q: '', year: '', country: '', date: '', page: 1, results: [], total: 0, loading: false, error: '', selected: null, searched: false },
   wYear: null, cYear: null, backTo: 'list', exportShown: false
 };
 function defaultYear(){ const ys = years(); const cy = new Date().getFullYear(); return ys.includes(cy) ? cy : (ys[0] ?? 'all'); }
@@ -317,8 +359,35 @@ const ACH = [
   { name: 'Maraton', desc: 'Koncert z co najmniej 25 utworami', icon: 'clock', goal: 25, val: () => Math.max(0, ...db.concerts.map(c => c.songs.length)) },
   { name: 'Rok w trasie', desc: '12 koncertów w jednym roku', icon: 'cal', goal: 12, val: () => { const t = topOf(countBy(db.concerts, c => String(parts(c.date).y))); return t ? [t[1], t[0]] : 0; } },
   { name: 'Podwójna dawka', desc: 'Koncerty dwa dni z rzędu', icon: 'flame', goal: 1, val: hasBackToBack },
-  { name: 'Krytyk', desc: 'Oceń 10 koncertów', icon: 'pen', goal: 10, val: () => db.concerts.filter(c => c.rating > 0).length }
+  { name: 'Krytyk', desc: 'Oceń 10 koncertów', icon: 'pen', goal: 10, val: () => db.concerts.filter(c => c.rating > 0).length },
+  { name: 'Biały kruk', desc: 'Usłysz utwór zagrany tylko na jednym koncercie trasy', icon: 'star', goal: 1, val: () => db.concerts.filter(c => c.songs.some(x => (rarityOf(c, x.name) || {}).kind === 'kruk')).length },
+  { name: 'Metalowa Europa', desc: 'Koncerty w 5 krajach', icon: 'globe', goal: 5, val: () => countBy(db.concerts, c => (c.country || '').toUpperCase()).size },
+  { name: 'Zimowy wojownik', desc: 'Koncert w styczniu', icon: 'skull', goal: 1, val: () => db.concerts.filter(c => parts(c.date).m === 1).length },
+  { name: 'Od supportu do headlinera', desc: 'Ten sam zespół jako support i jako gwiazda wieczoru', icon: 'crown', goal: 1, val: supportToHead },
+  { name: 'Wierny fan', desc: 'Ten sam zespół 3 lata z rzędu', icon: 'mountain', goal: 3, val: loyalFan },
+  { name: 'Wspólny pit', desc: 'Koncert razem ze znajomym z Gigbooka', icon: 'users', goal: 1, val: () => Object.keys(fr.data).reduce((n, u) => n + together(u).length, 0) }
 ];
+function supportToHead(){
+  const ev = new Map();
+  db.concerts.forEach(c => { const k = c.date + '|' + c.venue.trim().toLowerCase(); if (!ev.has(k)) ev.set(k, []); ev.get(k).push(c); });
+  const roles = new Map();
+  const add = (c, r) => { const k = c.artist.trim().toLowerCase(); if (!roles.has(k)) roles.set(k, new Set()); roles.get(k).add(r); };
+  ev.forEach(arr => {
+    if (arr.length === 1) { if (arr[0].songs.length >= 10) add(arr[0], 'h'); return; }
+    const max = Math.max(...arr.map(c => c.songs.length));
+    arr.forEach(c => add(c, c.songs.length === max ? 'h' : 's'));
+  });
+  for (const [k, r] of roles) if (r.size === 2) return [1, db.concerts.find(c => c.artist.trim().toLowerCase() === k).artist];
+  return 0;
+}
+function loyalFan(){
+  const m = new Map();
+  db.concerts.forEach(c => { const k = c.artist.trim(); if (!m.has(k)) m.set(k, new Set()); m.get(k).add(parts(c.date).y); });
+  let best = [0, ''];
+  m.forEach((ys, a) => { const arr = [...ys].sort((x, y) => x - y); let run = 1;
+    for (let i = 1; i <= arr.length; i++) { if (i < arr.length && arr[i] === arr[i - 1] + 1) run++; else { if (run > best[0]) best = [run, a]; run = 1; } } });
+  return best[0] ? best : 0;
+}
 const TITLES = ['Świeżak', 'Bywalec', 'Headbanger', 'Moshpitowiec', 'Wilk z pitu', 'Weteran Pogo', 'Legenda Sceny'];
 function achState(){
   return ACH.map(a => { const r = a.val(); const v = Array.isArray(r) ? r[0] : r; const detail = Array.isArray(r) ? r[1] : ''; return { ...a, v: Math.min(v, a.goal), raw: v, detail, done: v >= a.goal }; });
@@ -350,38 +419,86 @@ function mapSetlist(s){
   return { setlistId: s.id, artist: (s.artist && s.artist.name) || '', date: `${y}-${m}-${d}`,
     venue: (s.venue && s.venue.name) || '', city: (s.venue && s.venue.city && s.venue.city.name) || '',
     country: (s.venue && s.venue.city && s.venue.city.country && s.venue.city.country.code) || '',
-    tour: (s.tour && s.tour.name) || '', songs, url: s.url || '' };
+    tour: (s.tour && s.tour.name) || '', songs, url: s.url || '',
+    mbid: (s.artist && s.artist.mbid) || '', countryName: (s.venue && s.venue.city && s.venue.city.country && s.venue.city.country.name) || '',
+    lat: s.venue && s.venue.city && s.venue.city.coords && typeof s.venue.city.coords.lat === 'number' ? s.venue.city.coords.lat : null,
+    lng: s.venue && s.venue.city && s.venue.city.coords && typeof s.venue.city.coords.long === 'number' ? s.venue.city.coords.long : null };
 }
+/* Kolejka zapytań do setlist.fm: max ~2 na sekundę (limit klucza), wyniki zapamiętane */
+let slQueue = Promise.resolve();
+const slCache = new Map();
+function slJson(path, force){
+  if (!force && slCache.has(path)) return Promise.resolve(slCache.get(path));
+  const p = slQueue.then(async () => {
+    const r = await fetch(DEFAULT_PROXY + path, { headers: { Accept: 'application/json' } });
+    await new Promise(res => setTimeout(res, 600));
+    if (r.status === 404) return null;
+    if (r.status === 429) { const e = new Error('Limit zapytań setlist.fm – spróbuj za chwilę.'); e.status = 429; throw e; }
+    if (!r.ok) throw new Error('Błąd setlist.fm (' + r.status + ')');
+    const j = await r.json(); slCache.set(path, j); return j;
+  });
+  slQueue = p.catch(() => {});
+  return p;
+}
+/* Uzupełnianie starszych koncertów o współrzędne i id zespołu (max 8 na uruchomienie) */
+let backfillRunning = false;
+async function backfill(){
+  if (backfillRunning) return; backfillRunning = true;
+  const todo = db.concerts.filter(c => c.setlistId && (!c.mbid || c.lat === null)).slice(0, 8);
+  let changedAny = false;
+  for (const c of todo) {
+    try { const j = await slJson('/setlist/' + encodeURIComponent(c.setlistId)); if (!j) continue;
+      const m = mapSetlist(j); c.mbid = m.mbid || c.mbid; c.lat = m.lat; c.lng = m.lng; c.countryName = m.countryName || c.countryName;
+      if (!c.songs.length && m.songs.length) c.songs = m.songs;
+      touch(c); changedAny = true;
+    } catch (e) { break; }
+  }
+  backfillRunning = false;
+  if (changedAny) { changed(); const a = document.activeElement; if (!(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA'))) render(); }
+}
+function isoDaysAgo(n){ const d = new Date(); d.setDate(d.getDate() - n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+function dayDate(){ return ui.sf.dayDate || isoDaysAgo(ui.sf.dayOff); }
 async function search(page){
-  const base = (db.settings.proxyUrl || '').trim().replace(/\/+$/, '');
-  if (!base) return;
-  const q = ui.sf.q.trim(); if (!q) return;
-  Object.assign(ui.sf, { loading: true, error: '', page, searched: true });
-  if (page === 1) { ui.sf.results = []; ui.sf.selected = null; }
+  const s = ui.sf;
+  const params = new URLSearchParams({ p: String(page) });
+  if (s.tab === 'day') {
+    const [y, m, d] = dayDate().split('-'); params.set('date', `${d}-${m}-${y}`);
+    if (s.dayCountry) params.set('countryCode', s.dayCountry);
+  } else {
+    const q = s.q.trim();
+    if (!q) { s.error = 'Wpisz nazwę zespołu.'; render(); return; }
+    params.set('artistName', q);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s.date)) { const [y, m, d] = s.date.split('-'); params.set('date', `${d}-${m}-${y}`); }
+    else if (/^\d{4}$/.test(s.year.trim())) params.set('year', s.year.trim());
+    if (s.country) params.set('countryCode', s.country);
+  }
+  const reqId = (s.reqId = (s.reqId || 0) + 1);
+  Object.assign(s, { loading: true, error: '', page, searched: true });
+  if (page === 1) { s.results = []; s.selected = null; s.total = 0; }
   render();
   try {
-    const params = new URLSearchParams({ artistName: q, p: String(page) });
-    if (/^\d{4}$/.test(ui.sf.year.trim())) params.set('year', ui.sf.year.trim());
-    const r = await fetch(`${base}/search/setlists?${params}`, { headers: { Accept: 'application/json' } });
-    if (r.status === 404) { ui.sf.total = ui.sf.results.length; }
-    else if (!r.ok) throw new Error('HTTP ' + r.status);
-    else { const j = await r.json(); ui.sf.results = ui.sf.results.concat((j.setlist || []).map(mapSetlist)); ui.sf.total = j.total || 0; }
+    const j = await slJson(`/search/setlists?${params}`);
+    if (reqId !== s.reqId) return;
+    if (!j) { s.total = s.results.length; }
+    else { s.results = s.results.concat((j.setlist || []).map(mapSetlist)); s.total = j.total || 0; }
   } catch (e) {
-    ui.sf.error = 'Nie udało się połączyć z setlist.fm. Sprawdź adres pośrednika w ustawieniach i połączenie z internetem.';
+    if (reqId !== s.reqId) return;
+    s.error = e.status === 429 ? e.message : 'Nie udało się połączyć z setlist.fm. Sprawdź internet i spróbuj ponownie.';
   }
-  ui.sf.loading = false; render();
+  s.loading = false; render();
 }
 
 /* ====== Widoki ====== */
 function nav(){
-  const t = (v, icon, label) => `<button class="${ui.view === v ? 'on' : ''}" data-a="go" data-v="${v}" ${ui.view === v ? 'aria-current="page"' : ''}>${svg(icon)}<span>${label}</span></button>`;
-  return `<nav class="tabs" aria-label="Główna nawigacja"><div>${t('list', 'list', 'Koncerty')}${t('cal', 'cal', 'Kalendarz')}${t('ach', 'trophy', 'Osiągnięcia')}${t('wrap', 'flame', 'Wrapped')}</div></nav>`;
+  const cur = ui.view === 'cal' ? 'list' : ui.view;
+  const t = (v, icon, label) => `<button class="${cur === v ? 'on' : ''}" data-a="tab" data-v="${v}" ${cur === v ? 'aria-current="page"' : ''}>${svg(icon)}<span>${label}</span></button>`;
+  return `<nav class="tabs" aria-label="Główna nawigacja"><div>${t('list', 'list', 'Koncerty')}${t('map', 'map', 'Mapa')}${t('friends', 'users', 'Znajomi')}${t('ach', 'trophy', 'Odznaki')}${t('wrap', 'flame', 'Wrapped')}</div></nav>`;
 }
-function gigCard(c){
+function gigCard(c, action = 'open'){
   const p = parts(c.date);
   const meta = [c.songs.length ? `${c.songs.length} ${pl(c.songs.length, 'utwór', 'utwory', 'utworów')}` : 'brak setlisty', c.rating ? `★ ${c.rating}/5` : ''].filter(Boolean).join(' · ');
   const place = [c.venue, c.city + (isAbroad(c) ? ', ' + c.country : '')].filter(Boolean).join(' · ');
-  return `<button class="card gig" data-a="open" data-v="${c.id}">
+  return `<button class="card gig" data-a="${action}" data-v="${c.id}">
     <div class="datebox"><b>${String(p.d).padStart(2, '0')}</b><span>${MS[p.m - 1]}</span></div>
     <div style="flex:1;min-width:0"><div class="t">${esc(c.artist)}</div>
     <div class="s">${esc(place) || '&nbsp;'}</div><div class="m">${esc(meta)}${c.festival ? '<span class="tag">FESTIWAL</span>' : ''}</div></div></button>`;
@@ -391,18 +508,18 @@ function vList(){
   const ys = years();
   if (ui.year !== 'all' && !ys.includes(ui.year)) ui.year = ys[0] ?? 'all';
   const list = inYear(sorted(), ui.year);
-  let h = `<div class="top"><div class="logo">Gigbook</div><button class="iconbtn" data-a="go" data-v="settings" aria-label="Ustawienia">${svg('gear', 20)}</button></div>`;
-  if (!db.concerts.length) {
+  let h = `<div class="top"><div class="logo">Gigbook</div><div style="display:flex;gap:8px"><button class="iconbtn" data-a="tab" data-v="cal" aria-label="Kalendarz">${svg('cal', 20)}</button><button class="iconbtn" data-a="go" data-v="settings" aria-label="Ustawienia">${svg('gear', 20)}</button></div></div>`;
+  if (!db.concerts.length && !db.plans.length) {
     h += `<div class="empty"><div style="color:var(--accent)">${svg('skull', 64, 1.5)}</div><h1>Pusto pod sceną</h1>
-      <p>Dodaj koncert, na którym byłeś. Gigbook zapamięta setlistę, policzy osiągnięcia i na koniec roku zrobi Twój Wrapped.</p>
+      <p>Znajdź koncert, na którym byłeś. Gigbook pobierze setlistę z setlist.fm, policzy osiągnięcia i na koniec roku zrobi Twój Wrapped.</p>
       <button class="btn" data-a="add">${svg('plus', 20)} Dodaj pierwszy koncert</button>
-      ${auth ? '' : '<button class="btn ghost small" data-a="go" data-v="settings">Mam już konto – zaloguj się</button>'}
-      <button class="btn ghost small" data-a="demo">Wczytaj przykładowe dane</button></div>`;
+      ${auth ? '' : '<button class="btn ghost small" data-a="go" data-v="settings">Mam już konto – zaloguj się</button>'}</div>`;
     return h + nav();
   }
   if (!auth && !ui.bannerOff) h += `<div class="card" style="margin:16px 20px 0;padding:14px;display:flex;flex-direction:column;gap:10px;border-color:var(--accent)">
     <div style="font-size:14px;line-height:1.5;color:var(--text2)"><b style="color:var(--text)">Koncerty są tylko na tym telefonie.</b> Załóż konto, a zapiszą się w chmurze – nie przepadną przy zmianie telefonu.</div>
     <div style="display:flex;gap:8px"><button class="btn small" style="flex:1" data-a="go" data-v="settings">Załóż konto</button><button class="btn ghost small" style="flex:0 0 auto;width:auto;padding:0 16px" data-a="banneroff">Później</button></div></div>`;
+  h += plansHtml();
   const cities = countBy(list, c => c.city.trim().toLowerCase()).size;
   const arts = countBy(list, c => c.artist.trim().toLowerCase()).size;
   h += `<div class="card stats">
@@ -419,8 +536,7 @@ function vList(){
 }
 function vAdd(){
   let h = `<div class="top back"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button><h1>${ui.form && ui.form.id ? 'Edytuj koncert' : 'Dodaj koncert'}</h1></div><div class="pad">`;
-  if (!(ui.form && ui.form.id)) h += `<div class="seg" role="tablist"><button class="${ui.addMode === 'sf' ? 'on' : ''}" data-a="mode" data-v="sf">Z setlist.fm</button><button class="${ui.addMode === 'man' ? 'on' : ''}" data-a="mode" data-v="man">Ręcznie</button></div>`;
-  if (ui.addMode === 'sf' && !(ui.form && ui.form.id)) return h + vSearch() + '</div>';
+  if (!(ui.form && ui.form.id)) return h + vSearch() + '</div>';
   const f = ui.form || {};
   const fld = (id, label, val, extra = '') => `<div class="field"><label for="f_${id}">${label}</label><input class="inp" id="f_${id}" value="${esc(val)}" ${extra}></div>`;
   h += `<form id="gigform" class="pad" style="padding:0">
@@ -436,28 +552,67 @@ function vAdd(){
     <button class="btn" type="submit">Zapisz</button></form>`;
   return h + '</div>';
 }
+function dayLabel(iso){ const t = today(); if (iso === t) return 'dziś'; if (iso === isoDaysAgo(1)) return 'wczoraj'; if (iso === isoDaysAgo(2)) return 'przedwczoraj'; return fmtShort(iso); }
+function daysUntil(iso){ return Math.round((jsDate(iso) - jsDate(today())) / 864e5); }
+function resCard(r, i, mode, owned){
+  const s = ui.sf, t = today(), up = r.date > t, has = owned.has(r.setlistId), sel = s.selected === i;
+  const title = mode === 'day' ? esc(r.artist) : `${esc(fmtShort(r.date))} · ${esc(r.city)}`;
+  const sub = mode === 'day' ? `${esc(r.venue)} · ${esc(r.city)}${r.country && !HOME.includes(r.country) ? ', ' + esc(r.country) : ''}` : `${esc(r.artist)} · ${esc(r.venue)}`;
+  let info;
+  if (up) { const n = daysUntil(r.date); info = `Za ${n} ${pl(n, 'dzień', 'dni', 'dni')} – zaznacz „Idę”, przypomnę po koncercie`; }
+  else info = `${r.tour ? esc(r.tour) + ' · ' : ''}${r.songs.length ? r.songs.length + ' ' + pl(r.songs.length, 'utwór', 'utwory', 'utworów') : 'setlista jeszcze pusta'}${has ? ' · już w kolekcji' : ''}`;
+  if (up) { const planned = db.plans.some(x => x.setlistId === r.setlistId);
+    return `<div class="card res" style="cursor:default"><div style="min-width:0"><div class="t" style="color:var(--text2)">${title}</div><div class="muted" style="font-size:13px;margin-top:3px">${sub}</div>
+      <div class="small muted" style="margin-top:3px">${info}</div></div>
+      ${planned ? `<span class="tag acc" style="margin:0;flex-shrink:0">IDZIESZ</span>` : `<button class="btn ghost small" style="width:auto;padding:0 14px;flex-shrink:0" data-a="plan" data-v="${i}">Idę!</button>`}</div>`; }
+  return `<button class="card res ${sel ? 'sel' : ''}" data-a="pick" data-v="${i}" ${has ? 'disabled style="opacity:.5;cursor:default"' : ''}>
+    <div style="min-width:0"><div class="t">${title}</div><div class="muted" style="font-size:13px;margin-top:3px">${sub}</div>
+    <div class="small" style="color:var(--text2);margin-top:3px">${info}</div></div>
+    <div class="radio">${sel ? `<span style="color:#fff">${svg('check', 16, 3)}</span>` : ''}</div></button>`;
+}
 function vSearch(){
   const s = ui.sf;
-  if (!db.settings.proxyUrl) return `<div class="card note"><b style="color:var(--text)">Wyszukiwanie w setlist.fm nie jest jeszcze podłączone.</b><br>
-    Potrzebny jest mały pośrednik z Twoim kluczem API – ustawimy go w kolejnym kroku. Do tego czasu dodawaj koncerty ręcznie.</div>
-    <button class="btn ghost small" data-a="mode" data-v="man">Dodaj ręcznie</button>
-    <button class="btn ghost small" data-a="go" data-v="settings">Ustawienia pośrednika</button>`;
   const owned = new Set(db.concerts.map(c => c.setlistId).filter(Boolean));
-  let h = `<form id="sfform" style="display:flex;flex-direction:column;gap:10px">
-    <div class="field"><label for="sf_q">Zespół</label><input class="inp" id="sf_q" value="${esc(s.q)}" placeholder="np. Behemoth" autocomplete="off" required></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label for="sf_y">Rok (opcjonalnie)</label><input class="inp" id="sf_y" inputmode="numeric" maxlength="4" value="${esc(s.year)}"></div>
-    <div style="display:flex;align-items:flex-end"><button class="btn small" type="submit">${svg('search', 18)} Szukaj</button></div></div></form>`;
+  const countrySel = (id, val) => `<select class="inp" id="${id}">${COUNTRIES.map(([c, n]) => `<option value="${c}" ${val === c ? 'selected' : ''}>${n}</option>`).join('')}</select>`;
+  let h = `<div class="seg" role="tablist"><button class="${s.tab === 'day' ? 'on' : ''}" data-a="sftab" data-v="day" role="tab" aria-selected="${s.tab === 'day'}">Ostatnie koncerty</button><button class="${s.tab === 'band' ? 'on' : ''}" data-a="sftab" data-v="band" role="tab" aria-selected="${s.tab === 'band'}">Szukaj zespołu</button></div>`;
+  if (s.tab === 'day') {
+    const cur = dayDate();
+    h += `<div class="chips" style="padding:0" role="group" aria-label="Dzień">${[0, 1, 2].map(n => `<button class="chip light ${!s.dayDate && s.dayOff === n ? 'on' : ''}" data-a="sfday" data-v="${n}">${['Dziś', 'Wczoraj', 'Przedwczoraj'][n]}</button>`).join('')}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field"><label for="sf_dd">Inny dzień</label><input class="inp" id="sf_dd" type="date" max="${today()}" value="${esc(s.dayDate)}" style="color-scheme:dark"></div>
+        <div class="field"><label for="sf_dc">Kraj</label>${countrySel('sf_dc', s.dayCountry)}</div></div>
+      <div class="sect">Koncerty · ${esc(dayLabel(cur))}${s.dayCountry ? ' · ' + esc((COUNTRIES.find(c => c[0] === s.dayCountry) || ['', ''])[1]) : ''}</div>`;
+  } else {
+    h += `<form id="sfform" style="display:flex;flex-direction:column;gap:10px">
+      <div class="field"><label for="sf_q">Zespół</label><input class="inp" id="sf_q" value="${esc(s.q)}" placeholder="np. Behemoth" autocomplete="off"></div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:10px">
+        <div class="field"><label for="sf_c">Kraj</label>${countrySel('sf_c', s.country)}</div>
+        <div class="field"><label for="sf_y">Rok</label><input class="inp" id="sf_y" inputmode="numeric" maxlength="4" placeholder="np. 2026" value="${esc(s.year)}" ${s.date ? 'disabled style="opacity:.4"' : ''}></div></div>
+      <div class="field"><label for="sf_d">Dokładna data</label><input class="inp" id="sf_d" type="date" value="${esc(s.date)}" style="color-scheme:dark"></div>
+      <div class="small muted" style="margin-top:-2px">Kraj i daty są opcjonalne – wpisz je, jeśli wyników jest za dużo.</div>
+      <button class="btn small" type="submit">${svg('search', 18)} Szukaj</button></form>`;
+  }
   if (s.error) h += `<div class="err" role="alert">${esc(s.error)}</div>`;
-  if (s.searched && !s.loading && !s.results.length && !s.error) h += `<p class="muted">Brak wyników. Sprawdź pisownię albo dodaj koncert ręcznie.</p>`;
-  if (s.results.length) h += `<div class="sect">Wyniki z setlist.fm · ${nf(s.total)}</div>`;
-  s.results.forEach((r, i) => { const has = owned.has(r.setlistId);
-    h += `<button class="card res ${s.selected === i ? 'sel' : ''}" data-a="pick" data-v="${i}" ${has ? 'disabled style="opacity:.55"' : ''}>
-      <div><div class="t">${esc(fmtShort(r.date))} · ${esc(r.city)}</div><div class="muted" style="font-size:13px;margin-top:3px">${esc(r.artist)} · ${esc(r.venue)}</div>
-      <div class="small" style="color:var(--text2);margin-top:3px">${r.tour ? esc(r.tour) + ' · ' : ''}${r.songs.length ? r.songs.length + ' ' + pl(r.songs.length, 'utwór', 'utwory', 'utworów') : 'brak setlisty'}${has ? ' · już w kolekcji' : ''}</div></div>
-      <div class="radio">${s.selected === i ? `<span style="color:#fff">${svg('check', 16, 3)}</span>` : ''}</div></button>`; });
+  const t = today();
+  const past = [], up = [];
+  s.results.forEach((r, i) => (r.date > t ? up : past).push([r, i]));
+  past.sort((a, b) => b[0].date.localeCompare(a[0].date)); up.sort((a, b) => a[0].date.localeCompare(b[0].date));
+  if (s.searched && !s.loading && !s.results.length && !s.error) h += s.tab === 'day'
+    ? `<p class="muted" style="line-height:1.5">Brak koncertów z tego dnia w setlist.fm. Setlisty dodają fani, zwykle kilka godzin po koncercie – zajrzyj później albo wybierz inny kraj.</p>`
+    : `<p class="muted" style="line-height:1.5">Brak wyników. Sprawdź pisownię albo usuń rok. Koncertu nie ma w bazie? Każdy może go dodać na <a href="https://www.setlist.fm">setlist.fm</a> – potem pojawi się tutaj.</p>`;
+  if (past.length) {
+    if (s.tab === 'band') h += `<div class="sect">Już były</div>`;
+    h += past.map(([r, i]) => resCard(r, i, s.tab, owned)).join('');
+  }
+  if (up.length) {
+    const show = s.showUp ? up : up.slice(0, 3);
+    h += `<div class="sect" style="margin-top:6px">Nadchodzące · ${up.length}</div>` + show.map(([r, i]) => resCard(r, i, s.tab, owned)).join('');
+    if (up.length > 3 && !s.showUp) h += `<button class="btn ghost small" data-a="showup">Pokaż wszystkie nadchodzące</button>`;
+  }
   if (s.loading) h += `<p class="muted">Szukam…</p>`;
   if (!s.loading && s.results.length && s.results.length < s.total) h += `<button class="btn ghost small" data-a="more">Pokaż więcej</button>`;
-  if (s.results.length) h += `<button class="btn" data-a="addpicked" ${s.selected === null ? 'disabled' : ''}>Byłem tam!</button>`;
+  if (past.length && s.selected !== null) h += `<div style="position:sticky;bottom:calc(12px + env(safe-area-inset-bottom));z-index:3"><button class="btn" data-a="addpicked" style="box-shadow:0 8px 24px rgba(0,0,0,.8)">Byłem tam!</button></div>`;
+  else if (past.length) h += `<p class="small muted" style="text-align:center;margin:0">Zaznacz koncert, na którym byłeś.</p>`;
   h += `<div class="small muted" style="text-align:center">Dane koncertów: <a href="https://www.setlist.fm">setlist.fm</a></div>`;
   return h;
 }
@@ -469,13 +624,17 @@ function vDetail(){
   const fresh = c.songs.filter(s => !heardBefore.has(s.name.toLowerCase().trim())).length;
   const main = c.songs.filter(s => !s.encore), enc = c.songs.filter(s => s.encore);
   let i = 0;
-  const row = s => { i++; const isNew = nth > 1 && !heardBefore.has(s.name.toLowerCase().trim()); return `<div class="song"><span class="n">${i}</span><span class="x">${esc(s.name)}</span>${isNew ? '<span class="tag acc">PIERWSZY RAZ</span>' : ''}</div>`; };
+  const row = s => { i++; const isNew = nth > 1 && !heardBefore.has(s.name.toLowerCase().trim()); const r = rarityOf(c, s.name);
+    return `<div class="song"><span class="n">${i}</span><span class="x">${esc(s.name)}${r ? `<span class="small muted" style="display:block">zagrany na ${r.n} z ${c.rare.shows} koncertów</span>` : ''}</span>${r ? (r.kind === 'kruk' ? '<span class="tag acc">BIAŁY KRUK</span>' : '<span class="tag">RZADKOŚĆ</span>') : ''}${isNew ? '<span class="tag acc">PIERWSZY RAZ</span>' : ''}</div>`; };
+  const mates = Object.keys(fr.data).filter(u => fr.data[u].some(t => sameGig(c, t)));
   let h = `<div class="top back" style="justify-content:space-between"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button>
     <button class="iconbtn plain" data-a="edit" aria-label="Edytuj koncert">${svg('pen', 20)}</button></div>
     <div class="hero"><div class="bar"></div><h2>${esc(c.artist)}</h2>
     <div style="font-size:15px;color:var(--text2)">${esc(fmtLong(c.date))}</div>
     <div style="font-size:15px;color:var(--muted)">${esc([c.venue, [c.city, c.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</div>
-    ${c.tour ? `<div class="small muted">Trasa: ${esc(c.tour)}</div>` : ''}${c.festival ? '<div><span class="tag" style="margin:0">FESTIWAL</span></div>' : ''}</div>
+    ${c.tour ? `<div class="small muted">Trasa: ${esc(c.tour)}</div>` : ''}${c.festival ? '<div><span class="tag" style="margin:0">FESTIWAL</span></div>' : ''}
+    ${mates.length ? `<div class="small" style="color:var(--text2)">${svg('users', 14)} Byli też: ${mates.map(esc).join(', ')}</div>` : ''}
+    <button class="linkchip" data-a="band" data-v="${esc(c.artist)}">Profil zespołu ${svg('chev', 16)}</button></div>
     <div style="padding:16px 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-bottom:1px solid var(--line)">
     <div><div class="num" style="font-size:26px">${c.songs.length}</div><div class="lbl">${pl(c.songs.length, 'utwór', 'utwory', 'utworów')}</div></div>
     <div><div class="num" style="font-size:26px">${nth}.</div><div class="lbl">raz na tym zespole</div></div>
@@ -483,12 +642,18 @@ function vDetail(){
     <div class="pad"><div class="sect">Twoja ocena</div>
     <div class="rating" role="group" aria-label="Ocena">${[1, 2, 3, 4, 5].map(n => `<button class="${c.rating >= n ? 'on' : ''}" data-a="rate" data-v="${n}" aria-label="Ocena ${n} na 5" aria-pressed="${c.rating === n}"><i></i></button>`).join('')}</div>
     <label for="note" class="sect" style="margin-top:6px">Notatka</label>
-    <textarea class="inp" id="note" placeholder="Z kim byłeś, co działo się pod sceną, jak brzmiało…">${esc(c.note)}</textarea></div>
+    <textarea class="inp" id="note" placeholder="Z kim byłeś, co działo się pod sceną, jak brzmiało…">${esc(c.note)}</textarea>
+    ${photosHtml(c)}</div>
     <div style="padding:8px 20px 0"><div class="sect" style="padding-bottom:6px">Setlista</div>`;
-  if (!c.songs.length) h += `<p class="muted">Brak setlisty. Możesz ją dopisać w edycji.</p>`;
+  if (!c.songs.length) h += `<p class="muted">Brak setlisty. Odśwież ją z setlist.fm poniżej albo dopisz w edycji.</p>`;
+  else if (rareBusy.has(c.id)) h += `<p class="small muted" style="margin:0 0 6px">Sprawdzam, jak rzadko zespół gra te utwory…</p>`;
+  else if (c.rare && c.rare.shows >= 5) h += `<p class="small muted" style="margin:0 0 6px">Rzadkość wg ${c.rare.shows} koncertów ${c.rare.scope === 'tour' ? 'tej trasy' : 'zespołu w ' + parts(c.date).y}.</p>`;
+  else if (c.rare) h += `<p class="small muted" style="margin:0 0 6px">Za mało setlist na setlist.fm, żeby ocenić rzadkość utworów.</p>`;
+  else if (c.mbid) h += `<button class="btn ghost small" style="margin-bottom:8px" data-a="checkrare">${svg('star', 18)} Sprawdź rzadkość utworów</button>`;
   h += main.map(row).join('');
   if (enc.length) h += `<div class="sect" style="padding:14px 0 6px">Bis</div>` + enc.map(row).join('');
   h += `</div><div class="pad">`;
+  if (c.setlistId) h += `<button class="btn ${c.songs.length ? 'ghost' : ''} small" data-a="refreshsl">Odśwież setlistę z setlist.fm</button>`;
   if (c.url) h += `<div class="small muted" style="text-align:center">Setlista: <a href="${esc(c.url)}">zobacz na setlist.fm</a></div>`;
   h += ui.delArm ? `<button class="btn danger small" data-a="delyes">Na pewno usunąć ten koncert?</button><button class="btn ghost small" data-a="delno">Anuluj</button>`
     : `<button class="btn ghost small" data-a="delask">Usuń koncert</button>`;
@@ -498,7 +663,7 @@ function yearChips(cur, action){
   return `<div class="chips" role="group" aria-label="Rok">${years().map(y => `<button class="chip ${cur === y ? 'on' : ''}" data-a="${action}" data-v="${y}">${y}</button>`).join('')}</div>`;
 }
 function vCal(){
-  let h = `<div class="top"><h1 class="big">Kalendarz</h1></div>`;
+  let h = `<div class="top"><h1 class="big">Kalendarz</h1><button class="iconbtn" data-a="tab" data-v="list" aria-label="Lista koncertów">${svg('list', 20)}</button></div>`;
   if (!db.concerts.length) return h + `<div class="empty"><p>Kalendarz zapełni się, gdy dodasz koncerty.</p><button class="btn" data-a="add">Dodaj koncert</button></div>` + nav();
   if (!years().includes(ui.cYear)) ui.cYear = defaultYear() === 'all' ? years()[0] : defaultYear();
   const list = inYear(sorted(), ui.cYear).reverse();
@@ -533,6 +698,7 @@ function vWrap(){
   const w = wrapped(ui.wYear);
   h += `<div class="top"><div style="font-family:var(--logo);font-size:24px;color:var(--accent)">Gigbook</div></div>${years().length > 1 ? yearChips(ui.wYear, 'wyear') : ''}
     <div class="pad" style="gap:20px"><div><div class="sect" style="letter-spacing:3px">Twój rok pod sceną</div><div class="wbig">${ui.wYear}</div></div>
+    <button class="btn" data-a="slopen">${svg('play', 20)} Odtwórz Wrapped</button>
     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px;padding:16px 0" class="hr">
       <div><div class="wnum">${w.n}</div><div class="lbl" style="font-size:13px">${pl(w.n, 'koncert', 'koncerty', 'koncertów')}</div></div>
       <div><div class="wnum">${nf(w.songsTotal)}</div><div class="lbl" style="font-size:13px">${pl(w.songsTotal, 'utwór', 'utwory', 'utworów')} na żywo</div></div>
@@ -546,7 +712,7 @@ function vWrap(){
   if (w.longest && w.longest.songs.length) facts.push(['Najdłuższa setlista', `${w.longest.artist} · ${w.longest.songs.length} ${pl(w.longest.songs.length, 'utwór', 'utwory', 'utworów')}`]);
   if (w.month && w.n > 1) facts.push(['Najgorętszy miesiąc', `${MN[Number(w.month[0]) - 1]} · ${w.month[1]} ${pl(w.month[1], 'koncert', 'koncerty', 'koncertów')}`]);
   facts.forEach(([k, v]) => { h += `<div class="card" style="padding:14px"><div class="small muted">${k}</div><div style="font-family:var(--head);font-weight:600;font-size:18px;text-transform:uppercase;margin-top:4px">${esc(v)}</div></div>`; });
-  h += `<button class="btn" data-a="share">${svg('share', 20)} Udostępnij</button></div>`;
+  h += `<button class="btn ghost small" data-a="share">Udostępnij jako tekst</button></div>`;
   return h + nav();
 }
 function vSettings(){
@@ -578,25 +744,457 @@ function vSettings(){
     <div class="field"><label for="impfile">Przywróć z pliku</label><input type="file" id="impfile" accept=".json,application/json" class="inp" style="padding-top:12px"></div>
     <div class="field"><label for="imptext">…albo wklej skopiowaną kopię</label><textarea class="inp" id="imptext" rows="4" placeholder='{"version":1,"concerts":[…]}'></textarea></div>
     <button class="btn ghost small" data-a="importtext">Przywróć z wklejonego tekstu</button>
-    <div class="sect" style="margin-top:12px">setlist.fm</div>
-    <div class="field"><label for="proxy">Adres pośrednika (Cloudflare Worker)</label><input class="inp" id="proxy" value="${esc(db.settings.proxyUrl)}" placeholder="https://gigbook-proxy.twoja-nazwa.workers.dev" autocomplete="off"></div>
-    <button class="btn ghost small" data-a="saveproxy">Zapisz adres</button>
     <div class="sect" style="margin-top:12px">Dane</div>
     <div class="small muted">${db.concerts.length} ${pl(db.concerts.length, 'koncert', 'koncerty', 'koncertów')} w kolekcji · ${Math.round(json.length / 1024)} KB</div>
     ${ui.clearArm ? `<button class="btn danger small" data-a="clearyes">Na pewno usunąć WSZYSTKIE koncerty?</button><button class="btn ghost small" data-a="clearno">Anuluj</button>` : `<button class="btn ghost small" data-a="clearask">Usuń wszystkie dane</button>`}
-    <div class="small muted" style="text-align:center;margin-top:8px">Gigbook · dane koncertów z <a href="https://www.setlist.fm">setlist.fm</a></div></div>`;
+    <div class="small muted" style="text-align:center;margin-top:8px">Gigbook · wersja testowa 0.10 · dane koncertów z <a href="https://www.setlist.fm">setlist.fm</a></div></div>`;
+  return h;
+}
+
+/* ====== Rzadkość utworów ====== */
+const rareBusy = new Set();
+async function checkRarity(c){
+  if (!c || !c.mbid || !c.songs.length || rareBusy.has(c.id)) return;
+  rareBusy.add(c.id); if (ui.view === 'detail') render();
+  try {
+    const q = new URLSearchParams({ artistMbid: c.mbid });
+    if (c.tour) q.set('tourName', c.tour); else q.set('year', String(parts(c.date).y));
+    const shows = [];
+    for (let p = 1; p <= 3; p++) {
+      q.set('p', String(p));
+      const j = await slJson('/search/setlists?' + q);
+      if (!j || !j.setlist) break;
+      j.setlist.forEach(x => { const m = mapSetlist(x); if (m.songs.length && m.date <= today()) shows.push(new Set(m.songs.map(t => t.name.toLowerCase().trim()))); });
+      if (p * (j.itemsPerPage || 20) >= (j.total || 0)) break;
+    }
+    const songs = {};
+    c.songs.forEach(t => { const k = t.name.toLowerCase().trim(); songs[t.name] = shows.filter(set => set.has(k)).length; });
+    c.rare = { shows: shows.length, scope: c.tour ? 'tour' : 'year', songs, at: Date.now() };
+    touch(c); changed();
+  } catch (e) { toast(e.status === 429 ? e.message : 'Nie udało się sprawdzić rzadkości utworów.'); }
+  rareBusy.delete(c.id);
+  if (!isTyping()) render();
+}
+function rarityOf(c, name){
+  if (!c.rare || c.rare.shows < 5) return null;
+  const n = c.rare.songs[name]; if (n == null) return null;
+  const r = n / c.rare.shows;
+  if (n <= 1 || r <= 0.05) return { kind: 'kruk', n: Math.max(1, n) };
+  if (r <= 0.25) return { kind: 'rare', n };
+  return null;
+}
+function isTyping(){ const a = document.activeElement; return !!(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT')); }
+
+/* ====== Profil zespołu ====== */
+const bandRecent = {};
+async function loadBandRecent(mbid){
+  if (!mbid || bandRecent[mbid]) return;
+  bandRecent[mbid] = { loading: true };
+  try {
+    const j = await slJson('/artist/' + encodeURIComponent(mbid) + '/setlists?p=1');
+    const list = ((j && j.setlist) || []).map(mapSetlist).filter(m => m.songs.length && m.date <= today());
+    const cnt = new Map();
+    list.forEach(m => new Set(m.songs.map(t => t.name)).forEach(n => cnt.set(n, (cnt.get(n) || 0) + 1)));
+    bandRecent[mbid] = { shows: list.length, songs: [...cnt].map(([name, n]) => ({ name, n })).sort((a, b) => b.n - a.n) };
+  } catch (e) { bandRecent[mbid] = { err: e.status === 429 ? e.message : 'Nie udało się pobrać ostatnich koncertów zespołu.' }; }
+  if (ui.view === 'band') render();
+}
+function vBand(){
+  const key = (ui.band || '').trim().toLowerCase();
+  const list = db.concerts.filter(c => c.artist.trim().toLowerCase() === key).sort((a, b) => b.date.localeCompare(a.date));
+  if (!list.length) { ui.view = 'list'; return vList(); }
+  const name = list[0].artist, mbid = (list.find(c => c.mbid) || {}).mbid || '';
+  if (mbid) loadBandRecent(mbid); else backfill();
+  const heard = new Map();
+  list.forEach(c => c.songs.forEach(t => { const k = t.name.toLowerCase().trim(); const e = heard.get(k) || { name: t.name, n: 0 }; e.n++; heard.set(k, e); }));
+  const hs = [...heard.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+  const first = list[list.length - 1], maxN = Math.max(1, ...hs.map(x => x.n));
+  const cities = countBy(list, c => c.city.trim().toLowerCase()).size;
+  let h = `<div class="top back"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button></div>
+  <div class="hero"><div class="bar"></div><h2>${esc(name)}</h2><div class="muted" style="font-size:14px">Pierwszy raz: ${esc(fmtShort(first.date))}${first.city ? ' · ' + esc(first.city) : ''}</div></div>
+  <div style="padding:16px 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-bottom:1px solid var(--line)">
+    <div><div class="num" style="font-size:26px">${list.length}</div><div class="lbl">${pl(list.length, 'koncert', 'koncerty', 'koncertów')}</div></div>
+    <div><div class="num" style="font-size:26px">${hs.length}</div><div class="lbl">różnych utworów</div></div>
+    <div><div class="num" style="font-size:26px">${cities}</div><div class="lbl">${pl(cities, 'miasto', 'miasta', 'miast')}</div></div></div>
+  <div class="list" style="padding-top:16px"><div class="sect">Twoje koncerty</div>${list.map(c => gigCard(c)).join('')}</div>
+  <div style="padding:22px 20px 0"><div class="sect" style="padding-bottom:6px">Utwory, które słyszałeś</div>`;
+  if (!hs.length) h += '<p class="muted">Brak setlist w Twoich koncertach.</p>';
+  h += hs.slice(0, ui.bandAll ? 9999 : 15).map(t => `<div class="song"><span class="x">${esc(t.name)}</span>
+    <span style="width:72px;height:6px;background:var(--line);border-radius:3px;overflow:hidden;flex-shrink:0"><i style="display:block;height:100%;width:${t.n / maxN * 100}%;background:var(--accent)"></i></span>
+    <span class="muted" style="width:30px;text-align:right;font-size:13px">${t.n}×</span></div>`).join('');
+  if (hs.length > 15 && !ui.bandAll) h += `<button class="btn ghost small" style="margin-top:10px" data-a="bandall">Pokaż wszystkie (${hs.length})</button>`;
+  h += `</div><div style="padding:22px 20px 0"><div class="sect" style="padding-bottom:6px">Jeszcze nie słyszałeś na żywo</div>`;
+  if (!mbid) h += `<p class="small muted">Uzupełniam dane zespołu z setlist.fm – wróć tu za chwilę.</p>`;
+  else {
+    const r = bandRecent[mbid];
+    if (!r || r.loading) h += `<p class="muted">Sprawdzam ostatnie koncerty zespołu…</p>`;
+    else if (r.err) h += `<p class="err">${esc(r.err)}</p>`;
+    else {
+      const miss = r.songs.filter(t => !heard.has(t.name.toLowerCase().trim()));
+      h += `<p class="small muted" style="margin:0 0 6px">Utwory z ${r.shows} ostatnich koncertów zespołu, których nie było na Twoich setlistach.</p>`;
+      h += miss.length ? miss.slice(0, 25).map(t => `<div class="song"><span class="x">${esc(t.name)}</span><span class="muted" style="font-size:13px">${t.n}/${r.shows}</span></div>`).join('')
+        : '<p class="muted">Słyszałeś wszystko, co grają ostatnio. Szacun!</p>';
+    }
+  }
+  return h + `<div class="small muted" style="padding:16px 0 8px">Dane: <a href="https://www.setlist.fm">setlist.fm</a></div></div><div style="height:16px"></div>`;
+}
+
+/* ====== Mapa ====== */
+let leafletP = null, mapObj = null;
+function loadLeaflet(){
+  if (window.L) return Promise.resolve();
+  if (leafletP) return leafletP;
+  leafletP = new Promise((res, rej) => {
+    const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'; document.head.appendChild(l);
+    const sc = document.createElement('script'); sc.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'; sc.onload = res; sc.onerror = () => { leafletP = null; rej(); }; document.head.appendChild(sc);
+  });
+  return leafletP;
+}
+function kmBetween(a, b){ const R = 6371, t = x => x * Math.PI / 180; const dLat = t(b.lat - a.lat), dLng = t(b.lng - a.lng);
+  const q = Math.sin(dLat / 2) ** 2 + Math.cos(t(a.lat)) * Math.cos(t(b.lat)) * Math.sin(dLng / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(q)); }
+function homeCity(){ const all = db.concerts.filter(c => c.lat !== null); const t = topOf(countBy(all, c => c.city.trim().toLowerCase())); return t ? all.find(c => c.city.trim().toLowerCase() === t[0]) : null; }
+function geoStats(list){
+  const withC = list.filter(c => c.lat !== null && c.lng !== null), home = homeCity();
+  let dist = 0; if (home) withC.forEach(c => { const d = kmBetween(home, c); if (d > 30) dist += 2 * d; });
+  return { withC, missing: list.length - withC.length, home, km: Math.round(dist / 10) * 10,
+    countries: countBy(list, c => (c.country || '').toUpperCase()).size, cities: countBy(list, c => c.city.trim().toLowerCase()).size };
+}
+const countryName = c => (COUNTRIES.find(x => x[0] === (c.country || '').toUpperCase()) || [])[1] || c.countryName || c.country || '?';
+function vMap(){
+  let h = `<div class="top"><h1 class="big">Mapa</h1></div>`;
+  if (!db.concerts.length) return h + `<div class="empty"><p>Tu zobaczysz na mapie wszystkie miasta, w których byłeś na koncertach.</p><button class="btn" data-a="add">Dodaj koncert</button></div>` + nav();
+  const list = ui.mYear === 'all' ? db.concerts : inYear(db.concerts, ui.mYear);
+  const g = geoStats(list);
+  if (g.missing) backfill();
+  h += `<div class="chips" role="group" aria-label="Rok"><button class="chip ${ui.mYear === 'all' ? 'on' : ''}" data-a="myear" data-v="all">Wszystkie</button>${years().map(y => `<button class="chip ${ui.mYear === y ? 'on' : ''}" data-a="myear" data-v="${y}">${y}</button>`).join('')}</div>
+  <div class="card stats" style="margin-top:8px">
+    <div><div class="num">${g.countries}</div><div class="lbl">${pl(g.countries, 'kraj', 'kraje', 'krajów')}</div></div>
+    <div><div class="num">${g.cities}</div><div class="lbl">${pl(g.cities, 'miasto', 'miasta', 'miast')}</div></div>
+    <div><div class="num">${nf(g.km)}</div><div class="lbl">km w trasie</div></div></div>
+  <div id="map" role="img" aria-label="Mapa miast z koncertami"></div>
+  <div class="pad" style="gap:8px">`;
+  if (g.home) h += `<p class="small muted" style="margin:0;line-height:1.5">Kilometry liczone tam i z powrotem z Twojego miasta bazowego (${esc(g.home.city)} – tam byłeś najczęściej), w linii prostej.</p>`;
+  if (g.missing) h += `<p class="small muted" style="margin:0">${g.missing} ${pl(g.missing, 'koncert', 'koncerty', 'koncertów')} bez współrzędnych – uzupełniam z setlist.fm.</p>`;
+  const cs = [...countBy(list, c => (c.country || '?').toUpperCase())].sort((a, b) => b[1] - a[1]);
+  if (cs.length) h += `<div class="sect" style="margin-top:8px">Kraje</div>` + cs.map(([code, n]) => `<div class="song"><span class="x">${esc(countryName({ country: code, countryName: (list.find(c => (c.country || '?').toUpperCase() === code) || {}).countryName }))}</span><span class="muted" style="font-size:13px">${n} ${pl(n, 'koncert', 'koncerty', 'koncertów')}</span></div>`).join('');
+  return h + `</div>` + nav();
+}
+async function initMap(){
+  const el = document.getElementById('map'); if (!el) return;
+  try { await loadLeaflet(); } catch (e) { el.innerHTML = '<p class="muted" style="padding:20px">Nie udało się wczytać mapy. Sprawdź połączenie z internetem.</p>'; return; }
+  if (!el.isConnected) return;
+  if (mapObj) { try { mapObj.remove(); } catch (e) {} mapObj = null; }
+  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#D7192E';
+  const list = (ui.mYear === 'all' ? db.concerts : inYear(db.concerts, ui.mYear)).filter(c => c.lat !== null);
+  const groups = new Map();
+  list.forEach(c => { const k = c.lat.toFixed(2) + ',' + c.lng.toFixed(2); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(c); });
+  mapObj = L.map(el, { zoomControl: false }).setView([52, 19], 5);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(mapObj);
+  const pts = [];
+  groups.forEach(arr => {
+    arr.sort((a, b) => b.date.localeCompare(a.date));
+    const c0 = arr[0]; pts.push([c0.lat, c0.lng]);
+    L.circleMarker([c0.lat, c0.lng], { radius: Math.min(20, 7 + arr.length * 2), color: accent, weight: 2, fillColor: accent, fillOpacity: .55 }).addTo(mapObj)
+      .bindPopup(`<b style="font-family:var(--head);text-transform:uppercase;font-size:15px">${esc(c0.city)}</b> · ${arr.length}<br>${arr.slice(0, 12).map(c => `<button class="l" data-a="open" data-v="${c.id}">${esc(fmtShort(c.date))} · ${esc(c.artist)}</button>`).join('')}${arr.length > 12 ? `<span class="muted">+ ${arr.length - 12} więcej</span>` : ''}`);
+  });
+  if (pts.length > 1) mapObj.fitBounds(pts, { padding: [30, 30], maxZoom: 9 }); else if (pts.length === 1) mapObj.setView(pts[0], 7);
+}
+
+/* ====== Plany: „Idę” ====== */
+function plansHtml(){
+  if (!db.plans.length) return '';
+  const t = today();
+  const ps = [...db.plans].sort((a, b) => a.date.localeCompare(b.date));
+  return `<div class="list" style="padding-top:16px"><div class="sect">Idziesz</div>` + ps.map(p => {
+    const d = parts(p.date), past = p.date <= t, n = daysUntil(p.date);
+    return `<div class="card" style="padding:12px;display:flex;flex-direction:column;gap:10px;${past ? 'border-color:var(--accent)' : ''}">
+      <div style="display:flex;gap:14px;align-items:center"><div class="datebox"><b>${String(d.d).padStart(2, '0')}</b><span>${MS[d.m - 1]}</span></div>
+      <div style="flex:1;min-width:0"><div style="font-family:var(--head);font-weight:600;font-size:19px;text-transform:uppercase">${esc(p.artist)}</div>
+      <div class="small muted" style="margin-top:3px">${esc([p.venue, p.city].filter(Boolean).join(' · '))}</div>
+      <div class="small" style="margin-top:3px;color:${past ? 'var(--accent-text)' : 'var(--text2)'}">${past ? (n === 0 ? 'Dziś! Byłeś?' : 'Byłeś na tym koncercie?') : `Za ${n} ${pl(n, 'dzień', 'dni', 'dni')}`}</div></div>
+      ${past ? '' : `<button class="iconbtn plain" data-a="planno" data-v="${p.id}" aria-label="Nie idę na ten koncert">${svg('close', 18)}</button>`}</div>
+      ${past ? `<div style="display:grid;grid-template-columns:2fr 1fr;gap:8px"><button class="btn small" data-a="planyes" data-v="${p.id}">Byłem – dodaj</button><button class="btn ghost small" data-a="planno" data-v="${p.id}">Nie byłem</button></div>` : ''}</div>`;
+  }).join('') + `</div>`;
+}
+async function planToConcert(id){
+  const p = db.plans.find(x => x.id === id); if (!p) return;
+  let m = null;
+  if (p.setlistId) { try { const j = await slJson('/setlist/' + encodeURIComponent(p.setlistId), true); if (j) m = mapSetlist(j); } catch (e) {} }
+  const base = m || { setlistId: p.setlistId, artist: p.artist, date: p.date, venue: p.venue, city: p.city, country: p.country, tour: '', songs: [], url: p.url, mbid: p.mbid, lat: null, lng: null, countryName: '' };
+  const now = Date.now();
+  const c = { id: uid(), ...base, festival: false, rating: 0, note: '', source: 'setlistfm', addedAt: now, mod: now, photos: [], rare: null };
+  db.concerts.push(c);
+  db.plans = db.plans.filter(x => x.id !== id); db.deleted.push({ id, at: now });
+  changed(); ui.year = parts(c.date).y; ui.hist = [];
+  go('detail', { id: c.id }, false);
+  toast(c.songs.length ? 'Dodano z setlistą!' : 'Dodano. Setlista pojawi się, gdy fani ją wpiszą – odśwież później.');
+  if (c.mbid && c.songs.length) checkRarity(c);
+}
+
+/* ====== Zdjęcia i bilet ====== */
+const idb = {
+  d: null,
+  open(){ if (this.d) return Promise.resolve(this.d); return new Promise((res, rej) => { const r = indexedDB.open('gigbook-photos', 1); r.onupgradeneeded = () => r.result.createObjectStore('p'); r.onsuccess = () => { this.d = r.result; res(this.d); }; r.onerror = () => rej(r.error); }); },
+  async tx(mode, fn){ const d = await this.open(); return new Promise((res, rej) => { const st = d.transaction('p', mode).objectStore('p'); const rq = fn(st); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); }); },
+  get(k){ return this.tx('readonly', st => st.get(k)); },
+  put(k, v){ return this.tx('readwrite', st => st.put(v, k)); },
+  del(k){ return this.tx('readwrite', st => st.delete(k)); }
+};
+const photoUrls = new Map();
+async function photoData(id){
+  if (photoUrls.has(id)) return photoUrls.get(id);
+  let d = null;
+  try { d = await idb.get(id); } catch (e) {}
+  if (!d && auth) { try { const r = await api('/photo/' + id); d = r && r.data; if (d) idb.put(id, d).catch(() => {}); } catch (e) {} }
+  if (d) photoUrls.set(id, d);
+  return d;
+}
+function hydratePhotos(){
+  document.querySelectorAll('img[data-photo]').forEach(async img => { const d = await photoData(img.dataset.photo); if (d && img.isConnected) { img.src = d; img.style.opacity = 1; } });
+}
+function compressImage(file, max = 1600){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const sc = Math.min(1, max / Math.max(img.width, img.height));
+      const cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); URL.revokeObjectURL(url);
+      let d = cv.toDataURL('image/jpeg', 0.78); if (d.length > 850000) d = cv.toDataURL('image/jpeg', 0.6);
+      res(d);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('img')); };
+    img.src = url;
+  });
+}
+let photosPushing = false;
+async function pushPhotos(){
+  if (!auth || photosPushing) return; photosPushing = true;
+  try {
+    for (const c of db.concerts) for (const p of c.photos) {
+      if (p.up) continue;
+      const d = await idb.get(p.id).catch(() => null); if (!d) continue;
+      const r = await fetch(DEFAULT_PROXY + '/photo/' + p.id, { method: 'PUT', headers: { Authorization: 'Bearer ' + auth.token, 'Content-Type': 'text/plain' }, body: d });
+      if (!r.ok) throw new Error('upload');
+      p.up = true; touch(c); changed();
+    }
+  } catch (e) {}
+  photosPushing = false;
+}
+async function addPhotos(files, kind){
+  const c = byId(ui.id); if (!c || !files.length) return;
+  const limit = kind === 'ticket' ? 1 - c.photos.filter(p => p.kind === 'ticket').length : 6 - c.photos.filter(p => p.kind === 'photo').length;
+  if (limit <= 0) { toast(kind === 'ticket' ? 'Bilet już jest – usuń stary, żeby dodać nowy.' : 'Maksymalnie 6 zdjęć na koncert.'); return; }
+  toast('Zapisuję…');
+  for (const f of [...files].slice(0, limit)) {
+    try { const d = await compressImage(f); const id = uid(); await idb.put(id, d); photoUrls.set(id, d); c.photos.push({ id, kind, up: false }); }
+    catch (e) { toast('Nie udało się wczytać zdjęcia.'); }
+  }
+  touch(c); changed(); render(); pushPhotos();
+}
+async function deletePhoto(id){
+  const c = byId(ui.id); if (!c) return;
+  c.photos = c.photos.filter(p => p.id !== id); touch(c); changed();
+  photoUrls.delete(id); idb.del(id).catch(() => {});
+  if (auth) fetch(DEFAULT_PROXY + '/photo/' + id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + auth.token } }).catch(() => {});
+  ui.viewer = null; ui.phDelArm = false; render();
+}
+function photosHtml(c){
+  const ph = c.photos.filter(p => p.kind === 'photo'), tk = c.photos.find(p => p.kind === 'ticket');
+  const thumb = p => `<button class="ph" data-a="viewph" data-v="${p.id}" aria-label="${p.kind === 'ticket' ? 'Zdjęcie biletu' : 'Zdjęcie z koncertu'}"><img data-photo="${p.id}" alt="" style="opacity:0">${p.kind === 'ticket' ? '<span class="tag">BILET</span>' : ''}</button>`;
+  return `<div class="sect" style="margin-top:6px">Zdjęcia i bilet</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+      ${tk ? thumb(tk) : ''}${ph.map(thumb).join('')}
+      ${ph.length < 6 ? `<label class="phadd" for="ph_in">${svg('camera', 22)}<span>Zdjęcie</span></label>` : ''}
+      ${tk ? '' : `<label class="phadd" for="tk_in">${svg('ticket', 22)}<span>Bilet</span></label>`}
+    </div>
+    <input type="file" id="ph_in" accept="image/*" multiple hidden><input type="file" id="tk_in" accept="image/*" hidden>`;
+}
+function vViewer(){
+  const id = ui.viewer;
+  return `<div class="viewer" role="dialog" aria-label="Zdjęcie">
+    <div style="display:flex;justify-content:flex-end"><button class="iconbtn plain" data-a="phclose" aria-label="Zamknij">${svg('close', 24)}</button></div>
+    <img data-photo="${id}" alt="Zdjęcie z koncertu" style="opacity:0">
+    ${ui.view === 'detail' ? (ui.phDelArm ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn danger small" data-a="phdel" data-v="${id}">Usuń zdjęcie</button><button class="btn ghost small" data-a="phdelno">Anuluj</button></div>`
+      : `<button class="btn ghost small" data-a="phdelask">Usuń zdjęcie</button>`) : ''}</div>`;
+}
+
+/* ====== Wrapped – slajdy ====== */
+function wrapSlides(y){
+  const w = wrapped(y), g = geoStats(w.list), out = [];
+  out.push({ kicker: 'Gigbook Wrapped', big: String(y), title: 'Twój rok pod sceną', sub: 'Stuknij po prawej stronie, żeby iść dalej' });
+  out.push({ kicker: 'Rok w liczbach', stats: [[nf(w.n), pl(w.n, 'koncert', 'koncerty', 'koncertów')], [nf(w.songsTotal), pl(w.songsTotal, 'utwór na żywo', 'utwory na żywo', 'utworów na żywo')], [nf(w.artists), pl(w.artists, 'zespół', 'zespoły', 'zespołów')], [nf(w.cities), pl(w.cities, 'miasto', 'miasta', 'miast')]] });
+  if (w.topA[0]) out.push({ kicker: 'Zespół roku', big: w.topA[0][0], title: `${w.topA[0][1]}× na żywo`, list: w.topA.slice(1).map(([a, n], i) => `${i + 2}. ${a} · ${n}×`) });
+  if (w.topSong && w.topSong.n > 1) out.push({ kicker: 'Utwór roku', big: w.topSong.name, title: `${w.topSong.artist} · słyszany ${w.topSong.n}×` });
+  if (g.withC.length) out.push({ kicker: 'Twoja mapa', stats: [[nf(g.countries), pl(g.countries, 'kraj', 'kraje', 'krajów')], [nf(g.cities), pl(g.cities, 'miasto', 'miasta', 'miast')], [nf(g.km), 'km w trasie']], title: w.venue && w.venue[1] > 1 ? `Klub roku: ${w.venue[0]}` : '' });
+  const best = [...w.list].sort((a, b) => b.rating - a.rating || b.songs.length - a.songs.length)[0];
+  if (best) out.push({ kicker: 'Koncert roku', big: best.artist, title: [best.venue, best.city].filter(Boolean).join(' · '), sub: fmtShort(best.date) + (best.rating ? ' · ' + '★'.repeat(best.rating) : '') });
+  let kruk = null;
+  w.list.forEach(c => c.songs.forEach(t => { const r = rarityOf(c, t.name); if (r && r.kind === 'kruk' && !kruk) kruk = { c, t, r }; }));
+  if (kruk) out.push({ kicker: 'Biały kruk', big: kruk.t.name, title: `${kruk.c.artist} · zagrany na ${kruk.r.n} z ${kruk.c.rare.shows} koncertów` });
+  out.push({ kicker: `Gigbook ${y}`, stats: [[nf(w.n), 'koncertów'], [nf(w.songsTotal), 'utworów'], [nf(w.artists), 'zespołów'], g.countries > 1 ? [nf(g.countries), 'krajów'] : [nf(w.cities), 'miast']], title: w.topA[0] ? `Numer 1: ${w.topA[0][0]}` : '', sub: '#Gigbook' });
+  return out;
+}
+function bigSize(t){ return /^\d{4}$/.test(t) ? 120 : t.length > 22 ? 40 : t.length > 14 ? 52 : t.length > 8 ? 64 : 84; }
+function slideHtml(s){
+  let h = `<div class="skick">${esc(s.kicker)}</div><div style="width:56px;height:5px;background:var(--accent)"></div>`;
+  if (s.big) h += `<div class="sbig ${/^\d{4}$/.test(s.big) ? 'year' : ''}" style="font-size:${bigSize(s.big)}px">${esc(s.big)}</div>`;
+  if (s.title) h += `<div class="stitle">${esc(s.title)}</div>`;
+  if (s.stats) h += `<div class="sstats">${s.stats.map(([n, l]) => `<div><div class="wnum" style="font-size:52px">${esc(n)}</div><div class="lbl" style="font-size:14px">${esc(l)}</div></div>`).join('')}</div>`;
+  if (s.list && s.list.length) h += `<div style="display:flex;flex-direction:column;gap:8px">${s.list.map(l => `<div style="font-size:18px;color:var(--text2)">${esc(l)}</div>`).join('')}</div>`;
+  if (s.sub) h += `<div class="muted" style="font-size:15px">${esc(s.sub)}</div>`;
+  return h;
+}
+function vSlides(){
+  const sl = ui.slides, s = sl.list[sl.i];
+  return `<div class="slides" role="dialog" aria-label="Wrapped ${ui.wYear}, slajd ${sl.i + 1} z ${sl.list.length}">
+    <div class="sbar" aria-hidden="true">${sl.list.map((_, k) => `<i class="${k <= sl.i ? 'on' : ''}"></i>`).join('')}</div>
+    <button class="iconbtn plain sclose" data-a="slclose" aria-label="Zamknij Wrapped">${svg('close', 24)}</button>
+    <button class="snav prev" data-a="slprev" aria-label="Poprzedni slajd"></button><button class="snav next" data-a="slnext" aria-label="Następny slajd"></button>
+    <div class="sbody">${slideHtml(s)}</div>
+    <div class="sfoot"><button class="btn" data-a="slsave">${svg('share', 20)} Udostępnij ten slajd</button></div></div>`;
+}
+function wrapText(x, text, maxW){
+  const words = String(text).split(/\s+/), lines = []; let line = '';
+  words.forEach(wd => { const t = line ? line + ' ' + wd : wd; if (x.measureText(t).width > maxW && line) { lines.push(line); line = wd; } else line = t; });
+  if (line) lines.push(line);
+  return lines;
+}
+async function slideImage(s){
+  await Promise.all(['700 100px Oswald', '600 60px Oswald', '500 40px Oswald', '100px "Pirata One"', '500 40px Inter'].map(f => document.fonts.load(f).catch(() => {})));
+  const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d'), acc = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#D7192E';
+  x.fillStyle = '#0B0B0C'; x.fillRect(0, 0, W, H); x.textBaseline = 'top';
+  let y = 330;
+  x.fillStyle = '#A1A1AA'; x.font = '500 44px Oswald'; x.fillText(s.kicker.toUpperCase().split('').join(String.fromCharCode(8202)), 90, y); y += 84;
+  x.fillStyle = acc; x.fillRect(90, y, 150, 14); y += 70;
+  if (s.big) {
+    const year = /^\d{4}$/.test(s.big), size = year ? 340 : Math.round(bigSize(s.big) * 2.6);
+    x.font = year ? `${size}px "Pirata One"` : `700 ${size}px Oswald`; x.fillStyle = year ? acc : '#F2F2F2';
+    wrapText(x, year ? s.big : s.big.toUpperCase(), W - 180).slice(0, 4).forEach(l => { x.fillText(l, 90, y); y += size * 1.04; });
+    y += 40;
+  }
+  if (s.title) { x.font = '600 64px Oswald'; x.fillStyle = '#F2F2F2'; wrapText(x, s.title.toUpperCase(), W - 180).slice(0, 3).forEach(l => { x.fillText(l, 90, y); y += 78; }); y += 40; }
+  if (s.stats) {
+    s.stats.forEach(([n, l], i) => { const cx = 90 + (i % 2) * 460, cy = y + Math.floor(i / 2) * 270;
+      x.font = '700 150px Oswald'; x.fillStyle = '#F2F2F2'; x.fillText(n, cx, cy);
+      x.font = '500 40px Inter'; x.fillStyle = '#A1A1AA'; x.fillText(l, cx, cy + 165); });
+    y += Math.ceil(s.stats.length / 2) * 270 + 20;
+  }
+  if (s.list) { x.font = '500 52px Inter'; x.fillStyle = '#D4D4D8'; s.list.forEach(l => { x.fillText(l, 90, y); y += 76; }); y += 20; }
+  if (s.sub) { x.font = '500 44px Inter'; x.fillStyle = '#A1A1AA'; x.fillText(s.sub, 90, y); }
+  x.font = '96px "Pirata One"'; x.fillStyle = acc; x.fillText('Gigbook', 90, H - 260);
+  x.font = '500 34px Inter'; x.fillStyle = '#71717A'; x.fillText('dane koncertów: setlist.fm', 90, H - 140);
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+const slideBlobs = new Map();
+function prepSlide(){
+  const sl = ui.slides; if (!sl) return;
+  const key = ui.wYear + ':' + sl.i;
+  if (!slideBlobs.has(key)) slideBlobs.set(key, slideImage(sl.list[sl.i]).then(b => { slideBlobs.set(key, b); return b; }));
+}
+async function shareSlide(){
+  const sl = ui.slides, key = ui.wYear + ':' + sl.i;
+  let blob = slideBlobs.get(key); if (!blob || blob.then) blob = await (blob || slideImage(sl.list[sl.i]));
+  const file = new File([blob], `gigbook-wrapped-${ui.wYear}-${sl.i + 1}.png`, { type: 'image/png' });
+  try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text: '#Gigbook' }); return; } }
+  catch (e) { if (e && e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000); toast('Obrazek zapisany.');
+}
+
+/* ====== Znajomi ====== */
+const fr = { loaded: false, loading: false, err: '', friends: [], requests: [], data: {} };
+async function loadFriends(force){
+  if (!auth || fr.loading || (fr.loaded && !force)) return;
+  fr.loading = true; fr.err = ''; if (ui.view === 'friends') render();
+  try {
+    const r = await api('/friends');
+    fr.friends = r.friends || []; fr.requests = r.requests || [];
+    const data = {};
+    await Promise.all(fr.friends.filter(f => f.mutual).map(async f => { try { const d = await api('/friend/' + encodeURIComponent(f.u)); data[f.u] = normalize({ concerts: d.concerts }).concerts; } catch (e) {} }));
+    fr.data = data; fr.loaded = true;
+  } catch (e) { fr.err = e.message; }
+  fr.loading = false;
+  if (['friends', 'friend', 'fdetail', 'detail', 'ach'].includes(ui.view) && !isTyping()) render();
+}
+const sameGig = (a, b) => !!((a.setlistId && a.setlistId === b.setlistId) || (a.date === b.date && a.venue && a.venue.trim().toLowerCase() === (b.venue || '').trim().toLowerCase()));
+function together(u){ const theirs = fr.data[u] || []; return db.concerts.filter(c => theirs.some(t => sameGig(c, t))); }
+const nick = u => `<span style="font-family:var(--head);font-weight:600;font-size:18px;text-transform:uppercase">${esc(u)}</span>`;
+function vFriends(){
+  let h = `<div class="top"><h1 class="big">Znajomi</h1>${auth ? `<button class="iconbtn" data-a="frrefresh" aria-label="Odśwież">${svg('refresh', 20)}</button>` : ''}</div>`;
+  if (!auth) return h + `<div class="empty"><div style="color:var(--accent)">${svg('users', 56, 1.5)}</div><p>Znajomi działają z kontem. Załóż je albo zaloguj się – potem dodasz wujka po nicku, zobaczycie swoje kolekcje, wspólne koncerty i ranking.</p><button class="btn" data-a="go" data-v="settings">Przejdź do konta</button></div>` + nav();
+  loadFriends();
+  h += `<form id="frform" style="display:flex;align-items:flex-end;gap:10px;padding:16px 20px 0"><div class="field" style="flex:1"><label for="fr_add">Dodaj znajomego po nicku</label><input class="inp" id="fr_add" value="${esc(ui.frAdd || '')}" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="24" placeholder="np. wujek_marek"></div><button class="btn small" type="submit" style="width:auto;padding:0 18px">Dodaj</button></form>
+    <p class="small muted" style="padding:6px 20px 0;margin:0">Twój nick: <b style="color:var(--text)">${esc(auth.u)}</b> – podaj go znajomym.</p>`;
+  if (ui.frMsg) h += `<p class="small" role="status" style="padding:8px 20px 0;margin:0;color:${ui.frMsgErr ? 'var(--accent-text)' : 'var(--text2)'}">${esc(ui.frMsg)}</p>`;
+  if (fr.err) h += `<p class="err" style="padding:8px 20px 0;margin:0">${esc(fr.err)}</p>`;
+  if (fr.loading && !fr.loaded) h += `<p class="muted" style="padding:8px 20px">Wczytuję…</p>`;
+  if (fr.requests.length) h += `<div class="list" style="padding-top:16px"><div class="sect">Chcą Cię dodać</div>` + fr.requests.map(u => `<div class="card" style="padding:12px 14px;display:flex;align-items:center;gap:12px"><span style="flex:1;min-width:0">${nick(u)}</span><button class="btn small" style="width:auto;padding:0 16px" data-a="fraccept" data-v="${esc(u)}">Dodaj też</button></div>`).join('') + `</div>`;
+  const y = new Date().getFullYear(), mutual = fr.friends.filter(f => f.mutual);
+  if (mutual.length) {
+    const rows = [{ u: auth.u, me: true, n: inYear(db.concerts, y).length }, ...mutual.map(f => ({ u: f.u, n: inYear(fr.data[f.u] || [], y).length, tog: together(f.u).length }))].sort((a, b) => b.n - a.n || (a.me ? -1 : 1));
+    h += `<div style="padding:20px 20px 0"><div class="sect" style="padding-bottom:8px">Ranking ${y} · koncerty</div>` + rows.map((r, i) => `<button class="card" ${r.me ? 'disabled' : `data-a="friend" data-v="${esc(r.u)}"`} style="width:100%;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;text-align:left;${r.me ? 'border-color:var(--accent);cursor:default' : 'cursor:pointer'}">
+      <span style="font-family:var(--head);font-weight:700;font-size:22px;width:26px;color:${i === 0 ? 'var(--accent)' : 'var(--text2)'}">${i + 1}</span>
+      <span style="flex:1;min-width:0;display:flex;flex-direction:column">${nick(r.u + (r.me ? ' (Ty)' : ''))}${!r.me && r.tog ? `<span class="small muted">Byliście razem: ${r.tog}</span>` : ''}</span>
+      <span style="font-family:var(--head);font-weight:700;font-size:24px">${r.n}</span></button>`).join('') + `</div>`;
+  }
+  const pending = fr.friends.filter(f => !f.mutual);
+  if (pending.length) h += `<div class="list" style="padding-top:16px"><div class="sect">Czekają na akceptację</div>` + pending.map(f => `<div class="card" style="padding:12px 14px;display:flex;align-items:center;gap:12px"><span style="flex:1;min-width:0;display:flex;flex-direction:column">${nick(f.u)}<span class="small muted">Kolekcję zobaczysz, gdy też Cię doda.</span></span><button class="btn ghost small" style="width:auto;padding:0 14px" data-a="frremove" data-v="${esc(f.u)}">Anuluj</button></div>`).join('') + `</div>`;
+  if (fr.loaded && !fr.friends.length && !fr.requests.length) h += `<div class="empty" style="padding-top:24px"><div style="color:var(--dim)">${svg('users', 48, 1.5)}</div><p>Nie masz jeszcze znajomych. Dodaj kogoś po nicku – gdy on też doda Ciebie, zobaczycie swoje kolekcje, wspólne koncerty i ranking.</p></div>`;
+  return h + `<div style="height:16px"></div>` + nav();
+}
+function vFriend(){
+  const u = ui.friend, list = (fr.data[u] || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+  const y = new Date().getFullYear(), tog = together(u).sort((a, b) => b.date.localeCompare(a.date));
+  const arts = countBy(list, c => c.artist.trim().toLowerCase()).size;
+  let h = `<div class="top back"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button></div>
+    <div class="hero"><div class="bar"></div><h2>${esc(u)}</h2></div>
+    <div style="padding:16px 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-bottom:1px solid var(--line)">
+      <div><div class="num" style="font-size:26px">${list.length}</div><div class="lbl">${pl(list.length, 'koncert', 'koncerty', 'koncertów')}</div></div>
+      <div><div class="num" style="font-size:26px">${inYear(list, y).length}</div><div class="lbl">w ${y}</div></div>
+      <div><div class="num" style="font-size:26px">${arts}</div><div class="lbl">${pl(arts, 'zespół', 'zespoły', 'zespołów')}</div></div></div>`;
+  if (tog.length) h += `<div class="list" style="padding-top:16px"><div class="sect">Byliście razem · ${tog.length}</div>${tog.map(c => gigCard(c)).join('')}</div>`;
+  h += `<div class="list" style="padding-top:16px"><div class="sect">Kolekcja</div>${list.length ? list.map(c => gigCard(c, 'fopen')).join('') : '<p class="muted">Jeszcze pusto.</p>'}</div>
+    <div class="pad">${ui.frRemArm ? `<button class="btn danger small" data-a="frremove" data-v="${esc(u)}">Na pewno usunąć ze znajomych?</button><button class="btn ghost small" data-a="frremno">Anuluj</button>` : `<button class="btn ghost small" data-a="frremask">Usuń ze znajomych</button>`}</div>`;
+  return h;
+}
+function vFDetail(){
+  const c = (fr.data[ui.friend] || []).find(x => x.id === ui.fid);
+  if (!c) { ui.view = 'friend'; return vFriend(); }
+  const owned = db.concerts.some(x => sameGig(x, c));
+  const main = c.songs.filter(t => !t.encore), enc = c.songs.filter(t => t.encore); let i = 0;
+  const row = t => { i++; return `<div class="song"><span class="n">${i}</span><span class="x">${esc(t.name)}</span></div>`; };
+  let h = `<div class="top back"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button></div>
+    <div class="hero"><div class="bar"></div><h2>${esc(c.artist)}</h2>
+    <div style="font-size:15px;color:var(--text2)">${esc(fmtLong(c.date))}</div>
+    <div style="font-size:15px;color:var(--muted)">${esc([c.venue, [c.city, c.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</div>
+    <div class="small muted">Z kolekcji: ${esc(ui.friend)}${c.rating ? ' · ocena ' + '★'.repeat(c.rating) : ''}</div></div>
+    <div class="pad">${owned ? `<div class="card note">Też tam byłeś – ten koncert jest w Twojej kolekcji.</div>` : (c.date <= today() ? `<button class="btn" data-a="fadd">Też tam byłem – dodaj do mojej kolekcji</button>` : '')}</div>
+    <div style="padding:0 20px"><div class="sect" style="padding-bottom:6px">Setlista</div>${c.songs.length ? main.map(row).join('') + (enc.length ? `<div class="sect" style="padding:14px 0 6px">Bis</div>` + enc.map(row).join('') : '') : '<p class="muted">Brak setlisty.</p>'}</div>
+    ${c.url ? `<div class="small muted" style="text-align:center;padding:16px">Setlista: <a href="${esc(c.url)}">zobacz na setlist.fm</a></div>` : ''}<div style="height:16px"></div>`;
   return h;
 }
 
 /* ====== Render ====== */
 const app = document.getElementById('app');
+const VIEWS = { list: vList, add: vAdd, detail: vDetail, cal: vCal, ach: vAch, wrap: vWrap, settings: vSettings, band: vBand, map: vMap, friends: vFriends, friend: vFriend, fdetail: vFDetail };
 function render(){
-  const v = { list: vList, add: vAdd, detail: vDetail, cal: vCal, ach: vAch, wrap: vWrap, settings: vSettings }[ui.view] || vList;
-  const ae = document.activeElement; const keep = ae && ae.id && ['sf_q', 'sf_y', 'note', 'proxy'].includes(ae.id) ? ae.id : null;
-  app.innerHTML = v();
+  const v = VIEWS[ui.view] || vList;
+  const ae = document.activeElement; const keep = ae && ae.id && ['sf_q', 'sf_y', 'note', 'fr_add', 'acc_u'].includes(ae.id) ? ae.id : null;
+  if (mapObj) { try { mapObj.remove(); } catch (e) {} mapObj = null; }
+  app.innerHTML = (location.protocol === 'file:' ? '<div style="background:#E8A317;color:#0B0B0C;text-align:center;font:700 12px var(--body);letter-spacing:2px;padding:6px">PODGLĄD Z DYSKU – NIE WERSJA OFICJALNA</div>' : '') + v()
+    + (ui.viewer ? vViewer() : '') + (ui.slides ? vSlides() : '');
+  document.body.style.overflow = ui.viewer || ui.slides ? 'hidden' : '';
   if (keep) { const el = document.getElementById(keep); if (el) el.focus(); }
+  hydratePhotos();
+  if (ui.view === 'map') initMap();
+  if (ui.slides) prepSlide();
 }
-function go(view, opts = {}){ ui.backTo = ui.view === 'settings' || ui.view === 'add' ? ui.backTo : ui.view; ui.view = view; ui.delArm = false; ui.clearArm = false; Object.assign(ui, opts); render(); window.scrollTo(0, 0); }
+function go(view, opts = {}, push = true){
+  if (push && ui.view !== view) ui.hist.push({ view: ui.view, id: ui.id, band: ui.band, friend: ui.friend, fid: ui.fid });
+  ui.view = view; ui.delArm = false; ui.clearArm = false; ui.frRemArm = false; ui.viewer = null; Object.assign(ui, opts); render(); window.scrollTo(0, 0);
+}
+function goTab(view){ ui.hist = []; ui.frMsg = ''; go(view, {}, false); if (view === 'friends' && auth && fr.loaded) loadFriends(true); }
 let toastT;
 function toast(msg){ let t = document.querySelector('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); } t.textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 2600); }
 async function copyText(txt){ try { await navigator.clipboard.writeText(txt); return true; } catch (e) { return false; } }
@@ -613,42 +1211,67 @@ function importData(txt){
   changed(); ui.year = null; render(); toast(`Przywrócono ${added} ${pl(added, 'koncert', 'koncerty', 'koncertów')}.`);
 }
 
-const DEMO = [
-  ['Behemoth', '2026-11-02', 'Progresja', 'Warszawa', 'PL', 5, false, ['Ora Pro Nobis Lucifer', 'Conquer All', 'Christians to the Lions', 'Bartzabel', 'Blow Your Trumpets Gabriel', '|Chant for Eschaton 2000', '|O Father O Satan O Sun!']],
-  ['Decapitated', '2026-10-18', 'Klub Studio', 'Kraków', 'PL', 4, false, ['Just a Cigarette', 'Kill the Cult', 'Spheres of Madness', 'Nest', 'Homo Sum']],
-  ['Vader', '2026-08-09', 'Brutal Assault', 'Jaroměř', 'CZ', 4, true, ['Wings', 'Sothis', 'Black to the Blind', 'Dark Age', 'Helleluyah!!! (God Is Dead)']],
-  ['Cannibal Corpse', '2026-08-08', 'Brutal Assault', 'Jaroměř', 'CZ', 5, true, ['Scavenger of Human Sorrow', 'Devoured by Vermin', 'Hammer Smashed Face', 'Stripped, Raped and Strangled']],
-  ['Behemoth', '2026-06-12', 'Mystic Festival', 'Gdańsk', 'PL', 5, true, ['Ora Pro Nobis Lucifer', 'Conquer All', 'Bartzabel', 'Ov Fire and the Void', '|Chant for Eschaton 2000']],
-  ['Vader', '2025-12-13', 'Progresja', 'Warszawa', 'PL', 4, false, ['Wings', 'Dark Age', 'Sothis', 'Reign Forever World']],
-  ['Behemoth', '2025-03-21', 'Spodek', 'Katowice', 'PL', 4, false, ['Ora Pro Nobis Lucifer', 'Conquer All', '|O Father O Satan O Sun!']]
-];
-function loadDemo(){
-  DEMO.forEach(([artist, date, venue, city, country, rating, festival, songs], i) => db.concerts.push({ id: uid() + i, setlistId: '', artist, date, venue, city, country, tour: '', festival, rating, note: '',
-    songs: songs.map(s => ({ name: s.replace(/^\|/, ''), encore: s.startsWith('|') })), url: '', source: 'demo', addedAt: Date.now() + i, mod: Date.now() + i }));
-  changed(); ui.year = null; render(); toast('Wczytano przykładowe koncerty. Usuniesz je w Ustawieniach.');
-}
 
 /* ====== Akcje ====== */
 const A = {
   go: v => go(v),
-  back: () => { if (ui.view === 'add' && ui.form && ui.form.id) return go('detail', { id: ui.form.id, form: null }); go(['detail', 'add', 'settings'].includes(ui.backTo) ? 'list' : ui.backTo); },
+  tab: v => goTab(v),
+  back: () => { const p = ui.hist.pop(); ui.form = null; if (p) { Object.assign(ui, { view: p.view, id: p.id, band: p.band, friend: p.friend, fid: p.fid, delArm: false, viewer: null }); render(); window.scrollTo(0, 0); } else goTab('list'); },
+  band: v => go('band', { band: v, bandAll: false }),
+  bandall: () => { ui.bandAll = true; render(); },
+  checkrare: () => checkRarity(byId(ui.id)),
+  myear: v => { ui.mYear = v === 'all' ? 'all' : Number(v); render(); },
+  plan: v => { const r = ui.sf.results[Number(v)]; if (!r || db.plans.some(x => x.setlistId === r.setlistId)) return;
+    db.plans.push({ id: uid(), setlistId: r.setlistId, artist: r.artist, date: r.date, venue: r.venue, city: r.city, country: r.country, mbid: r.mbid, url: r.url, mod: Date.now() });
+    changed(); render(); toast('Dodano do „Idziesz”. Po koncercie zapytam, czy byłeś.'); },
+  planyes: v => planToConcert(v),
+  planno: v => { db.plans = db.plans.filter(x => x.id !== v); db.deleted.push({ id: v, at: Date.now() }); changed(); render(); },
+  viewph: v => { ui.viewer = v; ui.phDelArm = false; render(); },
+  phclose: () => { ui.viewer = null; render(); },
+  phdelask: () => { ui.phDelArm = true; render(); },
+  phdelno: () => { ui.phDelArm = false; render(); },
+  phdel: v => deletePhoto(v),
+  slopen: () => { ui.slides = { list: wrapSlides(ui.wYear), i: 0 }; render(); },
+  slclose: () => { ui.slides = null; render(); },
+  slnext: () => { const sl = ui.slides; if (sl.i < sl.list.length - 1) { sl.i++; render(); } else { ui.slides = null; render(); } },
+  slprev: () => { const sl = ui.slides; if (sl.i > 0) { sl.i--; render(); } },
+  slsave: () => shareSlide(),
+  friend: v => go('friend', { friend: v, frRemArm: false }),
+  fopen: v => go('fdetail', { fid: v }),
+  fadd: () => { const c0 = (fr.data[ui.friend] || []).find(x => x.id === ui.fid); if (!c0) return; const now = Date.now();
+    const c = { ...c0, id: uid(), rating: 0, note: '', photos: [], rare: null, festival: !!c0.festival, source: 'friend', addedAt: now, mod: now };
+    db.concerts.push(c); changed(); ui.hist = []; ui.year = parts(c.date).y; go('detail', { id: c.id }, false); toast('Dodano do Twojej kolekcji!'); },
+  fraccept: async v => { try { await api('/friends', 'POST', { add: v }); ui.frMsg = `Dodano: ${v}. Teraz widzicie swoje kolekcje.`; ui.frMsgErr = false; } catch (e) { ui.frMsg = e.message; ui.frMsgErr = true; } loadFriends(true); },
+  frremove: async v => { try { await api('/friends', 'POST', { remove: v }); } catch (e) { toast(e.message); } delete fr.data[v]; ui.frRemArm = false; if (ui.view !== 'friends') goTab('friends'); loadFriends(true); },
+  frremask: () => { ui.frRemArm = true; render(); },
+  frremno: () => { ui.frRemArm = false; render(); },
+  frrefresh: () => { ui.frMsg = ''; loadFriends(true); },
   year: v => { ui.year = v === 'all' ? 'all' : Number(v); render(); },
   cyear: v => { ui.cYear = Number(v); render(); },
   wyear: v => { ui.wYear = Number(v); render(); },
-  add: () => { ui.form = null; ui.addMode = db.settings.proxyUrl ? 'sf' : 'man'; go('add'); },
-  demo: loadDemo,
-  mode: v => { ui.addMode = v; if (ui.view !== 'add') go('add'); else render(); },
+  add: () => { ui.form = null; go('add'); if (!ui.sf.searched || ui.sf.tab === 'day') search(1); },
+  sftab: v => { ui.sf.tab = v; Object.assign(ui.sf, { results: [], total: 0, selected: null, searched: false, error: '', showUp: false }); if (v === 'day') search(1); else render(); },
+  sfday: v => { ui.sf.dayOff = Number(v); ui.sf.dayDate = ''; ui.sf.showUp = false; search(1); },
+  showup: () => { ui.sf.showUp = true; render(); },
+  refreshsl: async () => { const c = byId(ui.id); if (!c || !c.setlistId) return;
+    try { const j = await slJson('/setlist/' + encodeURIComponent(c.setlistId), true); if (!j) throw 0;
+      const m = mapSetlist(j); if (m.mbid) c.mbid = m.mbid; if (m.lat !== null) { c.lat = m.lat; c.lng = m.lng; }
+      if (m.songs.length > c.songs.length || (m.songs.length && JSON.stringify(m.songs) !== JSON.stringify(c.songs))) { c.songs = m.songs; if (m.tour) c.tour = m.tour; c.rare = null; touch(c); changed(); render(); toast('Setlista zaktualizowana!'); if (c.mbid) checkRarity(c); }
+      else toast(m.songs.length ? 'Setlista jest aktualna.' : 'Na setlist.fm nadal brak setlisty – spróbuj później.');
+    } catch (e) { toast('Nie udało się połączyć z setlist.fm.'); } },
   open: v => go('detail', { id: v }),
-  edit: () => { const c = byId(ui.id); ui.form = { ...c, songsText: songsToText(c.songs) }; ui.addMode = 'man'; go('add'); },
+  edit: () => { const c = byId(ui.id); ui.form = { ...c, songsText: songsToText(c.songs) }; go('add'); },
   rate: v => { const c = byId(ui.id); const n = Number(v); c.rating = c.rating === n ? n - 1 : n; touch(c); changed(); render(); },
   delask: () => { ui.delArm = true; render(); },
   delno: () => { ui.delArm = false; render(); },
-  delyes: () => { db.concerts = db.concerts.filter(c => c.id !== ui.id); db.deleted.push({ id: ui.id, at: Date.now() }); changed(); toast('Koncert usunięty.'); go('list'); },
+  delyes: () => { const c = byId(ui.id); if (c) c.photos.forEach(p => { idb.del(p.id).catch(() => {}); if (auth) fetch(DEFAULT_PROXY + '/photo/' + p.id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + auth.token } }).catch(() => {}); });
+    db.concerts = db.concerts.filter(c => c.id !== ui.id); db.deleted.push({ id: ui.id, at: Date.now() }); changed(); toast('Koncert usunięty.'); goTab('list'); },
   pick: v => { ui.sf.selected = Number(v); render(); },
   more: () => search(ui.sf.page + 1),
   addpicked: () => { const r = ui.sf.results[ui.sf.selected]; if (!r) return;
-    const c = { id: uid(), ...r, festival: false, rating: 0, note: '', source: 'setlistfm', addedAt: Date.now(), mod: Date.now() }; db.concerts.push(c); changed();
-    ui.sf.selected = null; ui.year = parts(c.date).y; toast('Dodano do kolekcji!'); ui.backTo = 'list'; go('detail', { id: c.id }); },
+    const c = { id: uid(), ...r, festival: false, rating: 0, note: '', source: 'setlistfm', addedAt: Date.now(), mod: Date.now(), photos: [], rare: null }; db.concerts.push(c); changed();
+    ui.sf.selected = null; ui.year = parts(c.date).y; toast('Dodano do kolekcji!'); ui.hist = []; go('detail', { id: c.id }, false);
+    if (c.mbid && c.songs.length) checkRarity(c); },
   share: async () => { const w = wrapped(ui.wYear);
     const txt = `Mój rok pod sceną ${ui.wYear}: ${w.n} ${pl(w.n, 'koncert', 'koncerty', 'koncertów')}, ${w.songsTotal} ${pl(w.songsTotal, 'utwór', 'utwory', 'utworów')} na żywo, ${w.artists} ${pl(w.artists, 'zespół', 'zespoły', 'zespołów')}.` + (w.topA[0] ? ` Numer 1: ${w.topA[0][0]} (${w.topA[0][1]}×).` : '') + ' #Gigbook';
     try { if (navigator.share) { await navigator.share({ text: txt }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
@@ -672,15 +1295,26 @@ app.addEventListener('input', e => {
   const t = e.target;
   if (t.id === 'note') { const c = byId(ui.id); if (c) { c.note = t.value; touch(c); clearTimeout(noteT); noteT = setTimeout(changed, 600); } }
   if (t.id === 'acc_u') ui.accU = t.value;
+  if (t.id === 'fr_add') ui.frAdd = t.value;
   if (t.id === 'sf_q') ui.sf.q = t.value;
   if (t.id === 'sf_y') ui.sf.year = t.value;
+  if (t.id === 'sf_c') ui.sf.country = t.value;
+  if (t.id === 'sf_dc') { ui.sf.dayCountry = t.value; ui.sf.showUp = false; search(1); }
+  if (t.id === 'sf_dd') { if (/^\d{4}-\d{2}-\d{2}$/.test(t.value)) { ui.sf.dayDate = t.value; ui.sf.showUp = false; search(1); } }
+  if (t.id === 'sf_d') { ui.sf.date = t.value; const y = document.getElementById('sf_y'); if (y) { y.disabled = !!t.value; y.style.opacity = t.value ? '.4' : ''; } }
 });
 app.addEventListener('change', e => {
+  if (e.target.id === 'ph_in') { addPhotos(e.target.files, 'photo'); return; }
+  if (e.target.id === 'tk_in') { addPhotos(e.target.files, 'ticket'); return; }
   if (e.target.id === 'impfile' && e.target.files[0]) { const r = new FileReader(); r.onload = () => importData(String(r.result)); r.readAsText(e.target.files[0]); }
 });
 app.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id === 'sfform') { search(1); return; }
+  if (e.target.id === 'frform') { const v = document.getElementById('fr_add').value.trim(); if (!v) return;
+    api('/friends', 'POST', { add: v }).then(() => { ui.frAdd = ''; ui.frMsg = `Wysłano zaproszenie do: ${v}. Gdy też Cię doda, zobaczycie swoje kolekcje.`; ui.frMsgErr = false; loadFriends(true); })
+      .catch(err => { ui.frMsg = err.status === 0 ? 'Brak połączenia z serwerem.' : err.message; ui.frMsgErr = true; render(); });
+    return; }
   if (e.target.id === 'accform') { const mode = (e.submitter && e.submitter.value) || 'login'; ui.authErr = ''; doAuth(mode, document.getElementById('acc_u').value.trim(), document.getElementById('acc_p').value); return; }
   if (e.target.id === 'gigform') {
     const g = id => document.getElementById('f_' + id).value.trim();
@@ -690,13 +1324,18 @@ app.addEventListener('submit', e => {
     let c;
     if (ui.form && ui.form.id) { c = byId(ui.form.id); Object.assign(c, data); touch(c); toast('Zapisano zmiany.'); }
     else { c = { id: uid(), setlistId: '', rating: 0, note: '', url: '', source: 'manual', addedAt: Date.now(), mod: Date.now(), ...data }; db.concerts.push(c); toast('Dodano do kolekcji!'); }
-    changed(); ui.form = null; ui.year = parts(c.date).y; ui.backTo = 'list'; go('detail', { id: c.id });
+    changed(); ui.form = null; ui.year = parts(c.date).y; ui.hist.pop(); go('detail', { id: c.id }, false);
   }
 });
 window.addEventListener('pagehide', save);
+let tx0 = null;
+app.addEventListener('touchstart', e => { if (ui.slides) tx0 = e.touches[0].clientX; }, { passive: true });
+app.addEventListener('touchend', e => { if (!ui.slides || tx0 === null) return; const dx = e.changedTouches[0].clientX - tx0; tx0 = null; if (Math.abs(dx) > 60) (dx < 0 ? A.slnext : A.slprev)(); }, { passive: true });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && (ui.slides || ui.viewer)) { ui.slides = null; ui.viewer = null; render(); } });
 window.addEventListener('online', () => { if (auth) sync(); });
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && auth) sync(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && auth) { sync(); if (fr.loaded) loadFriends(true); } });
 if (auth) setTimeout(sync, 300);
+setTimeout(backfill, 1500);
 if ('serviceWorker' in navigator && location.protocol === 'https:') { try { navigator.serviceWorker.register('./sw.js').catch(() => {}); } catch (e) {} }
 render();
 </script>
