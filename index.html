@@ -17,7 +17,7 @@
 :root{
   --bg:#0B0B0C; --surface:#161618; --surface2:#111113; --line:#2A2A2E; --line2:#1E1E21;
   --text:#F2F2F2; --text2:#D4D4D8; --muted:#A1A1AA; --dim:#71717A;
-  --accent:#D7192E; --accent-text:#FF4D5E;
+  --accent:#D7192E; --accent-text:#FF4D5E; --on-accent:#FFFFFF;
   --head:'Oswald',Impact,'Arial Narrow',sans-serif; --logo:'Pirata One',serif; --body:'Inter',system-ui,sans-serif;
 }
 *{box-sizing:border-box}
@@ -40,7 +40,7 @@ h1.big{font-weight:700;font-size:32px}
 .chips{padding:16px 20px 4px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{height:36px;padding:0 16px;border-radius:18px;border:1px solid var(--line);background:transparent;color:var(--text2);font-weight:500;font-size:14px;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
 .chip.light.on{background:var(--text);border-color:var(--text);color:var(--bg)}
 .sect{font-family:var(--head);font-weight:500;font-size:13px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
 .list{padding:8px 20px 0;display:flex;flex-direction:column;gap:10px}
@@ -52,14 +52,14 @@ h1.big{font-weight:700;font-size:32px}
 .gig .s{font-size:13px;color:var(--muted);margin-top:3px}
 .gig .m{font-size:12px;color:var(--text2);margin-top:3px}
 .tag{font-size:10px;font-weight:600;letter-spacing:1px;padding:2px 6px;border-radius:4px;border:1px solid #52525B;color:var(--text2);vertical-align:middle;margin-left:6px;font-family:var(--body)}
-.tag.acc{background:var(--accent);border-color:var(--accent);color:#fff}
-.fab{position:fixed;right:max(20px,calc(50vw - 220px));bottom:calc(96px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:30px;background:var(--accent);color:#fff;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.6);cursor:pointer}
+.tag.acc{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.fab{position:fixed;right:max(20px,calc(50vw - 220px));bottom:calc(96px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:30px;background:var(--accent);color:var(--on-accent);border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.6);cursor:pointer}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
 nav.tabs div{max-width:480px;margin:0 auto;height:68px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 nav.tabs button{background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--muted);cursor:pointer;font-size:11px}
 nav.tabs button.on{color:var(--accent)}
 nav.tabs button.on span{color:var(--text);font-weight:600}
-.btn{height:54px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-family:var(--head);font-weight:600;font-size:18px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn{height:54px;border-radius:12px;border:none;background:var(--accent);color:var(--on-accent);font-family:var(--head);font-weight:600;font-size:18px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
 .btn:disabled{opacity:.4;cursor:default}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
 .btn.small{height:44px;font-size:15px}
@@ -70,7 +70,7 @@ nav.tabs button.on span{color:var(--text);font-weight:600}
 .inp:focus{border-color:var(--accent)}
 textarea.inp{height:auto;min-height:120px;padding:12px 14px;line-height:1.5;resize:vertical}
 .pad{padding:16px 20px;display:flex;flex-direction:column;gap:14px}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
 .seg button{height:40px;border:none;border-radius:9px;background:transparent;color:var(--text2);cursor:pointer;font-weight:500}
 .seg button.on{background:var(--text);color:var(--bg);font-weight:600}
 .res{padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;cursor:pointer;text-align:left;width:100%}
@@ -121,6 +121,12 @@ textarea.inp{height:auto;min-height:120px;padding:12px 14px;line-height:1.5;resi
 .check{display:flex;align-items:center;gap:10px;font-size:15px;min-height:44px;cursor:pointer}
 .check input{width:22px;height:22px;accent-color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+.songbtn{background:none;border:none;color:inherit;font:inherit;padding:0;text-align:left;cursor:pointer;line-height:1.35}
+.sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:55;border:none;width:100%;cursor:pointer}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:56;max-width:480px;margin:0 auto;background:var(--surface);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
+.sheet a.btn{text-decoration:none}
+.swatch{width:52px;height:52px;border-radius:26px;border:3px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.swatch.on{border-color:var(--text)}
 .slides{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;gap:16px;padding:calc(14px + env(safe-area-inset-top)) 24px calc(18px + env(safe-area-inset-bottom));max-width:480px;margin:0 auto}
 .sbar{display:flex;gap:4px;position:relative;z-index:3;padding-right:48px}.sbar i{flex:1;height:3px;border-radius:2px;background:#3F3F46}.sbar i.on{background:var(--text)}
 .sclose{position:absolute;right:12px;top:calc(2px + env(safe-area-inset-top));z-index:4}
@@ -162,8 +168,17 @@ const DN = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','
 const HOME = ['PL','POLSKA','POLAND'];
 const COUNTRIES = [['', 'Wszystkie kraje'], ['PL', 'Polska'], ['CZ', 'Czechy'], ['DE', 'Niemcy'], ['SK', 'Słowacja'], ['AT', 'Austria'], ['HU', 'Węgry'], ['LT', 'Litwa'],
   ['NL', 'Holandia'], ['BE', 'Belgia'], ['FR', 'Francja'], ['GB', 'Wielka Brytania'], ['DK', 'Dania'], ['SE', 'Szwecja'], ['NO', 'Norwegia'], ['FI', 'Finlandia'],
-  ['CH', 'Szwajcaria'], ['IT', 'Włochy'], ['ES', 'Hiszpania'], ['PT', 'Portugalia'], ['HR', 'Chorwacja'], ['SI', 'Słowenia'], ['UA', 'Ukraina'], ['US', 'USA']];
+  ['CH', 'Szwajcaria'], ['IT', 'Włochy'], ['ES', 'Hiszpania'], ['PT', 'Portugalia'], ['HR', 'Chorwacja'], ['SI', 'Słowenia'], ['UA', 'Ukraina'], ['US', 'USA'], ['CA', 'Kanada']];
 const DEFAULT_PROXY = 'https://gigbook-proxy.glodek300.workers.dev';
+const ACCENTS = [
+  { id: 'red', name: 'Krwista czerwień', a: '#D7192E', t: '#FF4D5E', on: '#FFFFFF' },
+  { id: 'green', name: 'Toksyczna zieleń', a: '#8FD400', t: '#A6E22E', on: '#0B0B0C' },
+  { id: 'gold', name: 'Złoto', a: '#E8A317', t: '#F2B43A', on: '#0B0B0C' },
+  { id: 'violet', name: 'Fiolet', a: '#6E4BFF', t: '#A08BFF', on: '#FFFFFF' },
+  { id: 'ice', name: 'Lodowy błękit', a: '#2F9BFF', t: '#6CB8FF', on: '#0B0B0C' }
+];
+function applyAccent(){ const x = ACCENTS.find(a => a.id === (db && db.settings.accent)) || ACCENTS[0]; const r = document.documentElement.style;
+  r.setProperty('--accent', x.a); r.setProperty('--accent-text', x.t); r.setProperty('--on-accent', x.on); }
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -218,7 +233,7 @@ function normalize(d){
   if (d && Array.isArray(d.concerts)) out.concerts = d.concerts.filter(c => c && c.artist && c.date).map(c => ({
     id: c.id || uid(), setlistId: c.setlistId || '', artist: String(c.artist), date: String(c.date),
     venue: c.venue || '', city: c.city || '', country: c.country || '', tour: c.tour || '',
-    festival: !!c.festival, rating: Math.max(0, Math.min(5, Number(c.rating) || 0)), note: c.note || '',
+    festival: !!c.festival, festName: c.festName || '', rating: Math.max(0, Math.min(5, Number(c.rating) || 0)), note: c.note || '',
     songs: Array.isArray(c.songs) ? c.songs.filter(s => s && s.name).map(s => ({ name: String(s.name), encore: !!s.encore })) : [],
     url: c.url || '', source: c.source || 'manual', addedAt: c.addedAt || Date.now(), mod: c.mod || c.addedAt || 0,
     mbid: c.mbid || '', lat: typeof c.lat === 'number' ? c.lat : null, lng: typeof c.lng === 'number' ? c.lng : null, countryName: c.countryName || '',
@@ -230,6 +245,7 @@ function normalize(d){
     mbid: x.mbid || '', url: x.url || '', mod: Number(x.mod) || 0 }));
   if (d && Array.isArray(d.deleted)) out.deleted = d.deleted.filter(x => x && x.id).map(x => ({ id: String(x.id), at: Number(x.at) || 0 }));
   if (d && d.settings && d.settings.proxyUrl) out.settings.proxyUrl = d.settings.proxyUrl;
+  if (d && d.settings && d.settings.accent) out.settings.accent = String(d.settings.accent);
   if (d && d.meta) out.meta = { dirty: !!d.meta.dirty, lastSync: Number(d.meta.lastSync) || 0 };
   return out;
 }
@@ -316,7 +332,7 @@ async function logout(force){
     await sync();
     if (db.meta.dirty) { ui.logoutArm = true; render(); return; }
   }
-  auth = null; saveAuth(); fr.loaded = false; fr.friends = []; fr.requests = []; fr.data = {};
+  auth = null; saveAuth(); fr.loaded = false; fr.tried = false; fr.friends = []; fr.requests = []; fr.data = {};
   const keep = db.settings; db = blank(); db.settings = keep; save();
   ui.logoutArm = false; ui.year = null; syncErr = ''; render(); toast('Wylogowano. Twoje koncerty czekają w chmurze.');
 }
@@ -330,7 +346,7 @@ const byId = id => db.concerts.find(c => c.id === id);
 /* ====== Stan interfejsu ====== */
 const ui = {
   view: 'list', hist: [], mYear: 'all', year: null, id: null, form: null, delArm: false, clearArm: false,
-  sf: { tab: 'day', dayOff: new Date().getHours() < 14 ? 1 : 0, dayDate: '', dayCountry: 'PL', showUp: false, q: '', year: '', country: '', date: '', page: 1, results: [], total: 0, loading: false, error: '', selected: null, searched: false },
+  sf: { fName: '', fCity: '', fStart: '', fDays: 1, fRes: [], fPick: new Set(), fLoading: false, fErr: '', fDone: false, tab: 'day', dayOff: new Date().getHours() < 14 ? 1 : 0, dayDate: '', dayCountry: 'PL', showUp: false, q: '', year: '', country: '', date: '', page: 1, results: [], total: 0, loading: false, error: '', selected: null, searched: false },
   wYear: null, cYear: null, backTo: 'list', exportShown: false
 };
 function defaultYear(){ const ys = years(); const cy = new Date().getFullYear(); return ys.includes(cy) ? cy : (ys[0] ?? 'all'); }
@@ -442,15 +458,19 @@ function slJson(path, force){
 }
 /* Uzupełnianie starszych koncertów o współrzędne i id zespołu (max 8 na uruchomienie) */
 let backfillRunning = false;
+const backfillTried = new Set();
 async function backfill(){
-  if (backfillRunning) return; backfillRunning = true;
-  const todo = db.concerts.filter(c => c.setlistId && (!c.mbid || c.lat === null)).slice(0, 8);
+  if (backfillRunning) return;
+  const todo = db.concerts.filter(c => c.setlistId && (!c.mbid || c.lat === null) && !backfillTried.has(c.id)).slice(0, 8);
+  if (!todo.length) return;
+  backfillRunning = true; todo.forEach(c => backfillTried.add(c.id));
   let changedAny = false;
   for (const c of todo) {
     try { const j = await slJson('/setlist/' + encodeURIComponent(c.setlistId)); if (!j) continue;
-      const m = mapSetlist(j); c.mbid = m.mbid || c.mbid; c.lat = m.lat; c.lng = m.lng; c.countryName = m.countryName || c.countryName;
+      const m = mapSetlist(j), before = JSON.stringify([c.mbid, c.lat, c.lng, c.countryName, c.songs.length]);
+      c.mbid = m.mbid || c.mbid; if (m.lat !== null) { c.lat = m.lat; c.lng = m.lng; } c.countryName = m.countryName || c.countryName;
       if (!c.songs.length && m.songs.length) c.songs = m.songs;
-      touch(c); changedAny = true;
+      if (JSON.stringify([c.mbid, c.lat, c.lng, c.countryName, c.songs.length]) !== before) { touch(c); changedAny = true; }
     } catch (e) { break; }
   }
   backfillRunning = false;
@@ -546,6 +566,7 @@ function vAdd(){
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px">${fld('city', 'Miasto', f.city || '')}${fld('country', 'Kraj', f.country ?? 'PL', 'maxlength="20"')}</div>
     ${fld('tour', 'Trasa', f.tour || '')}
     <label class="check"><input type="checkbox" id="f_fest" ${f.festival ? 'checked' : ''}> Festiwal</label>
+    ${fld('festn', 'Nazwa festiwalu', f.festName || '', 'placeholder="np. Mystic Festival"')}
     <div class="field"><label for="f_songs">Setlista – jeden utwór w linii. Wpisz „BIS”, a kolejne utwory trafią do bisów.</label>
     <textarea class="inp" id="f_songs" rows="8">${esc(f.songsText || '')}</textarea></div>
     <div id="formerr" class="err" role="alert"></div>
@@ -568,13 +589,15 @@ function resCard(r, i, mode, owned){
   return `<button class="card res ${sel ? 'sel' : ''}" data-a="pick" data-v="${i}" ${has ? 'disabled style="opacity:.5;cursor:default"' : ''}>
     <div style="min-width:0"><div class="t">${title}</div><div class="muted" style="font-size:13px;margin-top:3px">${sub}</div>
     <div class="small" style="color:var(--text2);margin-top:3px">${info}</div></div>
-    <div class="radio">${sel ? `<span style="color:#fff">${svg('check', 16, 3)}</span>` : ''}</div></button>`;
+    <div class="radio">${sel ? `<span style="color:var(--on-accent)">${svg('check', 16, 3)}</span>` : ''}</div></button>`;
 }
 function vSearch(){
   const s = ui.sf;
   const owned = new Set(db.concerts.map(c => c.setlistId).filter(Boolean));
   const countrySel = (id, val) => `<select class="inp" id="${id}">${COUNTRIES.map(([c, n]) => `<option value="${c}" ${val === c ? 'selected' : ''}>${n}</option>`).join('')}</select>`;
-  let h = `<div class="seg" role="tablist"><button class="${s.tab === 'day' ? 'on' : ''}" data-a="sftab" data-v="day" role="tab" aria-selected="${s.tab === 'day'}">Ostatnie koncerty</button><button class="${s.tab === 'band' ? 'on' : ''}" data-a="sftab" data-v="band" role="tab" aria-selected="${s.tab === 'band'}">Szukaj zespołu</button></div>`;
+  const tb = (v, l) => `<button class="${s.tab === v ? 'on' : ''}" data-a="sftab" data-v="${v}" role="tab" aria-selected="${s.tab === v}">${l}</button>`;
+  let h = `<div class="seg" role="tablist">${tb('day', 'Ostatnie')}${tb('band', 'Zespół')}${tb('fest', 'Festiwal')}</div>`;
+  if (s.tab === 'fest') return h + vFest(s, owned);
   if (s.tab === 'day') {
     const cur = dayDate();
     h += `<div class="chips" style="padding:0" role="group" aria-label="Dzień">${[0, 1, 2].map(n => `<button class="chip light ${!s.dayDate && s.dayOff === n ? 'on' : ''}" data-a="sfday" data-v="${n}">${['Dziś', 'Wczoraj', 'Przedwczoraj'][n]}</button>`).join('')}</div>
@@ -625,14 +648,14 @@ function vDetail(){
   const main = c.songs.filter(s => !s.encore), enc = c.songs.filter(s => s.encore);
   let i = 0;
   const row = s => { i++; const isNew = nth > 1 && !heardBefore.has(s.name.toLowerCase().trim()); const r = rarityOf(c, s.name);
-    return `<div class="song"><span class="n">${i}</span><span class="x">${esc(s.name)}${r ? `<span class="small muted" style="display:block">zagrany na ${r.n} z ${c.rare.shows} koncertów</span>` : ''}</span>${r ? (r.kind === 'kruk' ? '<span class="tag acc">BIAŁY KRUK</span>' : '<span class="tag">RZADKOŚĆ</span>') : ''}${isNew ? '<span class="tag acc">PIERWSZY RAZ</span>' : ''}</div>`; };
+    return `<div class="song"><span class="n">${i}</span><span class="x">${songBtn(c.artist, s.name)}${r ? `<span class="small muted" style="display:block">zagrany na ${r.n} z ${c.rare.shows} koncertów</span>` : ''}</span>${r ? (r.kind === 'kruk' ? '<span class="tag acc">BIAŁY KRUK</span>' : '<span class="tag">RZADKOŚĆ</span>') : ''}${isNew ? '<span class="tag acc">PIERWSZY RAZ</span>' : ''}</div>`; };
   const mates = Object.keys(fr.data).filter(u => fr.data[u].some(t => sameGig(c, t)));
   let h = `<div class="top back" style="justify-content:space-between"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button>
     <button class="iconbtn plain" data-a="edit" aria-label="Edytuj koncert">${svg('pen', 20)}</button></div>
     <div class="hero"><div class="bar"></div><h2>${esc(c.artist)}</h2>
     <div style="font-size:15px;color:var(--text2)">${esc(fmtLong(c.date))}</div>
     <div style="font-size:15px;color:var(--muted)">${esc([c.venue, [c.city, c.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</div>
-    ${c.tour ? `<div class="small muted">Trasa: ${esc(c.tour)}</div>` : ''}${c.festival ? '<div><span class="tag" style="margin:0">FESTIWAL</span></div>' : ''}
+    ${c.tour ? `<div class="small muted">Trasa: ${esc(c.tour)}</div>` : ''}${c.festival ? `<div><span class="tag" style="margin:0">FESTIWAL${c.festName ? ' · ' + esc(c.festName.toUpperCase()) : ''}</span></div>` : ''}
     ${mates.length ? `<div class="small" style="color:var(--text2)">${svg('users', 14)} Byli też: ${mates.map(esc).join(', ')}</div>` : ''}
     <button class="linkchip" data-a="band" data-v="${esc(c.artist)}">Profil zespołu ${svg('chev', 16)}</button></div>
     <div style="padding:16px 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-bottom:1px solid var(--line)">
@@ -646,6 +669,8 @@ function vDetail(){
     ${photosHtml(c)}</div>
     <div style="padding:8px 20px 0"><div class="sect" style="padding-bottom:6px">Setlista</div>`;
   if (!c.songs.length) h += `<p class="muted">Brak setlisty. Odśwież ją z setlist.fm poniżej albo dopisz w edycji.</p>`;
+  if (c.songs.length) h += `<p class="small muted" style="margin:0 0 4px">Stuknij utwór, żeby go posłuchać.</p>`;
+  if (!c.songs.length) {}
   else if (rareBusy.has(c.id)) h += `<p class="small muted" style="margin:0 0 6px">Sprawdzam, jak rzadko zespół gra te utwory…</p>`;
   else if (c.rare && c.rare.shows >= 5) h += `<p class="small muted" style="margin:0 0 6px">Rzadkość wg ${c.rare.shows} koncertów ${c.rare.scope === 'tour' ? 'tej trasy' : 'zespołu w ' + parts(c.date).y}.</p>`;
   else if (c.rare) h += `<p class="small muted" style="margin:0 0 6px">Za mało setlist na setlist.fm, żeby ocenić rzadkość utworów.</p>`;
@@ -737,6 +762,11 @@ function vSettings(){
         <button class="btn ghost small" type="submit" value="register" ${ui.authBusy ? 'disabled' : ''}>Załóż konto</button></div>
       ${ui.authBusy ? '<p class="muted small" style="margin:0">Łączę…</p>' : ''}</form>`;
   }
+  const curA = db.settings.accent || 'red';
+  h += `<div class="sect" style="margin-top:12px">Wygląd</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap" role="radiogroup" aria-label="Kolor akcentu">${ACCENTS.map(a => `<button class="swatch ${curA === a.id ? 'on' : ''}" style="background:${a.a}" data-a="accent" data-v="${a.id}" role="radio" aria-checked="${curA === a.id}" aria-label="${a.name}">${curA === a.id ? `<span style="color:${a.on}">${svg('check', 22, 3)}</span>` : ''}</button>`).join('')}</div>
+    <div class="small muted">${esc((ACCENTS.find(a => a.id === curA) || ACCENTS[0]).name)}</div>
+    <button class="btn ghost small" data-a="welcome">Pokaż ekran powitalny</button>`;
   h += `<div class="sect" style="margin-top:12px">Kopia zapasowa</div>
     <p class="muted" style="margin:0;font-size:14px;line-height:1.5">${auth ? 'Masz konto, więc kopia nie jest konieczna – ale plik też nie zaszkodzi.' : 'Bez konta dane są tylko na tym urządzeniu. Rób kopię co jakiś czas: plik zachowaj w iCloud lub na Dysku Google.'}${storageOk ? '' : ' <b class="err">Uwaga: ta przeglądarka nie pozwala na trwały zapis – zrób kopię przed zamknięciem!</b>'}</p>
     <button class="btn small" data-a="export">Pobierz kopię (plik .json)</button>
@@ -747,7 +777,7 @@ function vSettings(){
     <div class="sect" style="margin-top:12px">Dane</div>
     <div class="small muted">${db.concerts.length} ${pl(db.concerts.length, 'koncert', 'koncerty', 'koncertów')} w kolekcji · ${Math.round(json.length / 1024)} KB</div>
     ${ui.clearArm ? `<button class="btn danger small" data-a="clearyes">Na pewno usunąć WSZYSTKIE koncerty?</button><button class="btn ghost small" data-a="clearno">Anuluj</button>` : `<button class="btn ghost small" data-a="clearask">Usuń wszystkie dane</button>`}
-    <div class="small muted" style="text-align:center;margin-top:8px">Gigbook · wersja testowa 0.10 · dane koncertów z <a href="https://www.setlist.fm">setlist.fm</a></div></div>`;
+    <div class="small muted" style="text-align:center;margin-top:8px">Gigbook · wersja testowa 0.11 · dane koncertów z <a href="https://www.setlist.fm">setlist.fm</a></div></div>`;
   return h;
 }
 
@@ -804,7 +834,7 @@ function vBand(){
   const list = db.concerts.filter(c => c.artist.trim().toLowerCase() === key).sort((a, b) => b.date.localeCompare(a.date));
   if (!list.length) { ui.view = 'list'; return vList(); }
   const name = list[0].artist, mbid = (list.find(c => c.mbid) || {}).mbid || '';
-  if (mbid) loadBandRecent(mbid); else backfill();
+  setTimeout(() => { if (mbid) loadBandRecent(mbid); else backfill(); }, 0);
   const heard = new Map();
   list.forEach(c => c.songs.forEach(t => { const k = t.name.toLowerCase().trim(); const e = heard.get(k) || { name: t.name, n: 0 }; e.n++; heard.set(k, e); }));
   const hs = [...heard.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
@@ -819,7 +849,7 @@ function vBand(){
   <div class="list" style="padding-top:16px"><div class="sect">Twoje koncerty</div>${list.map(c => gigCard(c)).join('')}</div>
   <div style="padding:22px 20px 0"><div class="sect" style="padding-bottom:6px">Utwory, które słyszałeś</div>`;
   if (!hs.length) h += '<p class="muted">Brak setlist w Twoich koncertach.</p>';
-  h += hs.slice(0, ui.bandAll ? 9999 : 15).map(t => `<div class="song"><span class="x">${esc(t.name)}</span>
+  h += hs.slice(0, ui.bandAll ? 9999 : 15).map(t => `<div class="song"><span class="x">${songBtn(name, t.name)}</span>
     <span style="width:72px;height:6px;background:var(--line);border-radius:3px;overflow:hidden;flex-shrink:0"><i style="display:block;height:100%;width:${t.n / maxN * 100}%;background:var(--accent)"></i></span>
     <span class="muted" style="width:30px;text-align:right;font-size:13px">${t.n}×</span></div>`).join('');
   if (hs.length > 15 && !ui.bandAll) h += `<button class="btn ghost small" style="margin-top:10px" data-a="bandall">Pokaż wszystkie (${hs.length})</button>`;
@@ -832,7 +862,7 @@ function vBand(){
     else {
       const miss = r.songs.filter(t => !heard.has(t.name.toLowerCase().trim()));
       h += `<p class="small muted" style="margin:0 0 6px">Utwory z ${r.shows} ostatnich koncertów zespołu, których nie było na Twoich setlistach.</p>`;
-      h += miss.length ? miss.slice(0, 25).map(t => `<div class="song"><span class="x">${esc(t.name)}</span><span class="muted" style="font-size:13px">${t.n}/${r.shows}</span></div>`).join('')
+      h += miss.length ? miss.slice(0, 25).map(t => `<div class="song"><span class="x">${songBtn(name, t.name)}</span><span class="muted" style="font-size:13px">${t.n}/${r.shows}</span></div>`).join('')
         : '<p class="muted">Słyszałeś wszystko, co grają ostatnio. Szacun!</p>';
     }
   }
@@ -865,7 +895,7 @@ function vMap(){
   if (!db.concerts.length) return h + `<div class="empty"><p>Tu zobaczysz na mapie wszystkie miasta, w których byłeś na koncertach.</p><button class="btn" data-a="add">Dodaj koncert</button></div>` + nav();
   const list = ui.mYear === 'all' ? db.concerts : inYear(db.concerts, ui.mYear);
   const g = geoStats(list);
-  if (g.missing) backfill();
+  if (g.missing) setTimeout(backfill, 0);
   h += `<div class="chips" role="group" aria-label="Rok"><button class="chip ${ui.mYear === 'all' ? 'on' : ''}" data-a="myear" data-v="all">Wszystkie</button>${years().map(y => `<button class="chip ${ui.mYear === y ? 'on' : ''}" data-a="myear" data-v="${y}">${y}</button>`).join('')}</div>
   <div class="card stats" style="margin-top:8px">
     <div><div class="num">${g.countries}</div><div class="lbl">${pl(g.countries, 'kraj', 'kraje', 'krajów')}</div></div>
@@ -1103,17 +1133,17 @@ async function shareSlide(){
 }
 
 /* ====== Znajomi ====== */
-const fr = { loaded: false, loading: false, err: '', friends: [], requests: [], data: {} };
+const fr = { loaded: false, loading: false, tried: false, err: '', friends: [], requests: [], data: {} };
 async function loadFriends(force){
-  if (!auth || fr.loading || (fr.loaded && !force)) return;
-  fr.loading = true; fr.err = ''; if (ui.view === 'friends') render();
+  if (!auth || fr.loading || ((fr.loaded || fr.tried) && !force)) return;
+  fr.loading = true; fr.tried = true; fr.err = '';
   try {
     const r = await api('/friends');
     fr.friends = r.friends || []; fr.requests = r.requests || [];
     const data = {};
     await Promise.all(fr.friends.filter(f => f.mutual).map(async f => { try { const d = await api('/friend/' + encodeURIComponent(f.u)); data[f.u] = normalize({ concerts: d.concerts }).concerts; } catch (e) {} }));
     fr.data = data; fr.loaded = true;
-  } catch (e) { fr.err = e.message; }
+  } catch (e) { fr.err = e.status === 404 || e.status === 405 ? 'Serwer nie obsługuje jeszcze znajomych – wklej nowy worker.js w Cloudflare (Edit code → Deploy).' : e.message; }
   fr.loading = false;
   if (['friends', 'friend', 'fdetail', 'detail', 'ach'].includes(ui.view) && !isTyping()) render();
 }
@@ -1123,12 +1153,12 @@ const nick = u => `<span style="font-family:var(--head);font-weight:600;font-siz
 function vFriends(){
   let h = `<div class="top"><h1 class="big">Znajomi</h1>${auth ? `<button class="iconbtn" data-a="frrefresh" aria-label="Odśwież">${svg('refresh', 20)}</button>` : ''}</div>`;
   if (!auth) return h + `<div class="empty"><div style="color:var(--accent)">${svg('users', 56, 1.5)}</div><p>Znajomi działają z kontem. Załóż je albo zaloguj się – potem dodasz wujka po nicku, zobaczycie swoje kolekcje, wspólne koncerty i ranking.</p><button class="btn" data-a="go" data-v="settings">Przejdź do konta</button></div>` + nav();
-  loadFriends();
+  if (!fr.loaded && !fr.tried) setTimeout(loadFriends, 0);
   h += `<form id="frform" style="display:flex;align-items:flex-end;gap:10px;padding:16px 20px 0"><div class="field" style="flex:1"><label for="fr_add">Dodaj znajomego po nicku</label><input class="inp" id="fr_add" value="${esc(ui.frAdd || '')}" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="24" placeholder="np. wujek_marek"></div><button class="btn small" type="submit" style="width:auto;padding:0 18px">Dodaj</button></form>
     <p class="small muted" style="padding:6px 20px 0;margin:0">Twój nick: <b style="color:var(--text)">${esc(auth.u)}</b> – podaj go znajomym.</p>`;
   if (ui.frMsg) h += `<p class="small" role="status" style="padding:8px 20px 0;margin:0;color:${ui.frMsgErr ? 'var(--accent-text)' : 'var(--text2)'}">${esc(ui.frMsg)}</p>`;
   if (fr.err) h += `<p class="err" style="padding:8px 20px 0;margin:0">${esc(fr.err)}</p>`;
-  if (fr.loading && !fr.loaded) h += `<p class="muted" style="padding:8px 20px">Wczytuję…</p>`;
+  if ((fr.loading || !fr.tried) && !fr.loaded && !fr.err) h += `<p class="muted" style="padding:8px 20px">Wczytuję…</p>`;
   if (fr.requests.length) h += `<div class="list" style="padding-top:16px"><div class="sect">Chcą Cię dodać</div>` + fr.requests.map(u => `<div class="card" style="padding:12px 14px;display:flex;align-items:center;gap:12px"><span style="flex:1;min-width:0">${nick(u)}</span><button class="btn small" style="width:auto;padding:0 16px" data-a="fraccept" data-v="${esc(u)}">Dodaj też</button></div>`).join('') + `</div>`;
   const y = new Date().getFullYear(), mutual = fr.friends.filter(f => f.mutual);
   if (mutual.length) {
@@ -1163,7 +1193,7 @@ function vFDetail(){
   if (!c) { ui.view = 'friend'; return vFriend(); }
   const owned = db.concerts.some(x => sameGig(x, c));
   const main = c.songs.filter(t => !t.encore), enc = c.songs.filter(t => t.encore); let i = 0;
-  const row = t => { i++; return `<div class="song"><span class="n">${i}</span><span class="x">${esc(t.name)}</span></div>`; };
+  const row = t => { i++; return `<div class="song"><span class="n">${i}</span><span class="x">${songBtn(c.artist, t.name)}</span></div>`; };
   let h = `<div class="top back"><button class="iconbtn plain" data-a="back" aria-label="Wróć">${svg('back', 22)}</button></div>
     <div class="hero"><div class="bar"></div><h2>${esc(c.artist)}</h2>
     <div style="font-size:15px;color:var(--text2)">${esc(fmtLong(c.date))}</div>
@@ -1175,16 +1205,103 @@ function vFDetail(){
   return h;
 }
 
+/* ====== Utwory: Spotify / YouTube ====== */
+const songBtn = (artist, name) => `<button class="songbtn" data-a="song" data-v="${esc(name)}" data-artist="${esc(artist)}">${esc(name)}</button>`;
+function vSongSheet(){
+  const { name, artist } = ui.songSheet, q = encodeURIComponent(`${artist} ${name}`);
+  return `<button class="sheetbg" data-a="songclose" aria-label="Zamknij"></button>
+    <div class="sheet" role="dialog" aria-label="Posłuchaj utworu">
+      <div style="font-family:var(--head);font-weight:600;font-size:22px;text-transform:uppercase;line-height:1.15">${esc(name)}</div>
+      <div class="muted" style="font-size:14px;margin-top:-4px">${esc(artist)}</div>
+      <a class="btn small" href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener">Posłuchaj w Spotify</a>
+      <a class="btn ghost small" href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener">Szukaj na YouTube</a>
+      <button class="btn ghost small" data-a="songclose">Zamknij</button></div>`;
+}
+
+/* ====== Festiwale ====== */
+async function searchFest(){
+  const s = ui.sf;
+  if (!s.fCity.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(s.fStart)) { s.fErr = 'Podaj miasto i pierwszy dzień festiwalu.'; render(); return; }
+  Object.assign(s, { fLoading: true, fErr: '', fRes: [], fPick: new Set(), fDone: false }); render();
+  try {
+    const out = [];
+    for (let k = 0; k < s.fDays; k++) {
+      const d = jsDate(s.fStart); d.setDate(d.getDate() + k);
+      const q = new URLSearchParams({ cityName: s.fCity.trim(), date: `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}` });
+      for (let p = 1; p <= 3; p++) {
+        q.set('p', String(p));
+        const j = await slJson('/search/setlists?' + q);
+        if (!j || !j.setlist) break;
+        out.push(...j.setlist.map(mapSetlist));
+        if (p * (j.itemsPerPage || 20) >= (j.total || 0)) break;
+      }
+    }
+    s.fRes = [...new Map(out.map(r => [r.setlistId, r])).values()];
+  } catch (e) { s.fErr = e.status === 429 ? e.message : 'Nie udało się połączyć z setlist.fm.'; }
+  s.fLoading = false; s.fDone = true; render();
+}
+function vFest(s, owned){
+  let h = `<form id="festform" style="display:flex;flex-direction:column;gap:10px">
+    <div class="field"><label for="fs_n">Nazwa festiwalu (opcjonalnie)</label><input class="inp" id="fs_n" value="${esc(s.fName)}" placeholder="np. Mystic Festival" autocomplete="off"></div>
+    <div class="field"><label for="fs_c">Miasto</label><input class="inp" id="fs_c" value="${esc(s.fCity)}" placeholder="np. Gdańsk" autocomplete="off"></div>
+    <div style="display:grid;grid-template-columns:3fr 2fr;gap:10px">
+      <div class="field"><label for="fs_d">Pierwszy dzień</label><input class="inp" id="fs_d" type="date" max="${today()}" value="${esc(s.fStart)}" style="color-scheme:dark"></div>
+      <div class="field"><label for="fs_k">Ile dni</label><select class="inp" id="fs_k">${[1, 2, 3, 4, 5].map(n => `<option value="${n}" ${s.fDays === n ? 'selected' : ''}>${n}</option>`).join('')}</select></div></div>
+    <div class="small muted" style="margin-top:-2px;line-height:1.5">Pokażę wszystkie koncerty w tym mieście w kolejnych dniach – zaznacz te, które widziałeś. Miasto wpisz tak jak na setlist.fm, np. „Gdańsk” albo „Jaroměř”.</div>
+    <button class="btn small" type="submit">${svg('search', 18)} Pokaż line-up</button></form>`;
+  if (s.fErr) h += `<div class="err" role="alert">${esc(s.fErr)}</div>`;
+  if (s.fLoading) h += `<p class="muted">Pobieram line-up…</p>`;
+  if (s.fDone && !s.fLoading && !s.fRes.length && !s.fErr) h += `<p class="muted" style="line-height:1.5">Brak koncertów w tym mieście w tych dniach. Sprawdź pisownię miasta i datę pierwszego dnia.</p>`;
+  const t = today();
+  [...new Set(s.fRes.map(r => r.date))].sort().forEach(d => {
+    const list = s.fRes.filter(r => r.date === d).sort((a, b) => (a.venue || '').localeCompare(b.venue || '') || b.songs.length - a.songs.length);
+    const addable = list.filter(r => !owned.has(r.setlistId) && r.date <= t);
+    h += `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px"><div class="sect">${esc(fmtLong(d))} · ${list.length}</div>${addable.length ? `<button class="chip light" style="height:34px" data-a="fsall" data-v="${d}">${addable.every(r => s.fPick.has(r.setlistId)) ? 'Odznacz dzień' : 'Zaznacz dzień'}</button>` : ''}</div>`;
+    list.forEach(r => { const has = owned.has(r.setlistId), up = r.date > t, on = s.fPick.has(r.setlistId);
+      h += `<button class="card res ${on ? 'sel' : ''}" data-a="fspick" data-v="${esc(r.setlistId)}" ${has || up ? 'disabled style="opacity:.5;cursor:default"' : ''} aria-pressed="${on}">
+        <div style="min-width:0"><div class="t">${esc(r.artist)}</div><div class="muted" style="font-size:13px;margin-top:3px">${esc(r.venue)}</div>
+        <div class="small" style="color:var(--text2);margin-top:3px">${has ? 'już w kolekcji' : up ? 'jeszcze się nie odbył' : r.songs.length ? r.songs.length + ' ' + pl(r.songs.length, 'utwór', 'utwory', 'utworów') : 'setlista jeszcze pusta'}</div></div>
+        <div class="radio" style="border-radius:7px">${on ? `<span style="color:var(--on-accent)">${svg('check', 16, 3)}</span>` : ''}</div></button>`; });
+  });
+  if (s.fPick.size) h += `<div style="position:sticky;bottom:calc(12px + env(safe-area-inset-bottom));z-index:3"><button class="btn" data-a="fsadd" style="box-shadow:0 8px 24px rgba(0,0,0,.8)">Dodaj zaznaczone (${s.fPick.size})</button></div>`;
+  return h + `<div class="small muted" style="text-align:center">Dane koncertów: <a href="https://www.setlist.fm">setlist.fm</a></div>`;
+}
+
+/* ====== Ekran powitalny ====== */
+const WELCOME_KEY = 'gigbook.welcome';
+function isStandalone(){ return window.navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches); }
+function welcomeSlides(){
+  const out = [{ icon: 'skull', title: 'Witaj w Gigbooku', text: 'Twój pamiętnik koncertowy. Dodajesz koncert, na którym byłeś, a setlista pobiera się sama z setlist.fm.' }];
+  if (!isStandalone()) out.push({ icon: 'share', title: 'Dodaj do ekranu', text: 'W Safari stuknij „Udostępnij”, a potem „Do ekranu początkowego”. Otwieraj Gigbook zawsze z ikony – wtedy działa jak zwykła aplikacja i nie gubi danych.' });
+  out.push({ icon: 'users', title: 'Załóż konto', text: 'Z kontem koncerty zapisują się w chmurze i nie przepadną przy zmianie telefonu. Dodasz też znajomych po nicku i porównacie się w rankingu.', acc: !auth });
+  out.push({ icon: 'flame', title: 'Odznaki i Wrapped', text: 'Zbieraj odznaki, łap rzadkie utwory i śledź swoje koncerty na mapie. Na koniec roku odpal swój Wrapped.', last: true });
+  return out;
+}
+function vWelcome(){
+  const list = welcomeSlides(), i = Math.min(ui.welcome.i, list.length - 1), w = list[i];
+  return `<div class="slides" role="dialog" aria-label="Witaj w Gigbooku, krok ${i + 1} z ${list.length}">
+    <div class="sbar" aria-hidden="true" style="padding-right:100px">${list.map((_, k) => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</div>
+    <button class="btn ghost small sclose" style="width:auto;padding:0 14px;height:38px;top:calc(-4px + env(safe-area-inset-top))" data-a="wskip">Pomiń</button>
+    <div class="sbody" style="gap:20px"><div style="color:var(--accent)">${svg(w.icon, 72, 1.5)}</div>
+      <div class="sbig" style="font-size:44px">${esc(w.title)}</div>
+      <div style="font-size:17px;line-height:1.55;color:var(--text2)">${esc(w.text)}</div></div>
+    <div class="sfoot" style="display:flex;flex-direction:column;gap:10px">
+      ${w.last ? `<button class="btn" data-a="wadd">${svg('plus', 20)} Dodaj pierwszy koncert</button><button class="btn ghost small" data-a="wskip">Rozejrzę się sam</button>`
+        : w.acc ? `<button class="btn" data-a="wacc">Załóż konto</button><button class="btn ghost small" data-a="wnext">Później</button>`
+        : `<button class="btn" data-a="wnext">Dalej</button>`}</div></div>`;
+}
+function closeWelcome(){ ui.welcome = null; try { localStorage.setItem(WELCOME_KEY, '1'); } catch (e) {} render(); }
+
 /* ====== Render ====== */
 const app = document.getElementById('app');
 const VIEWS = { list: vList, add: vAdd, detail: vDetail, cal: vCal, ach: vAch, wrap: vWrap, settings: vSettings, band: vBand, map: vMap, friends: vFriends, friend: vFriend, fdetail: vFDetail };
 function render(){
   const v = VIEWS[ui.view] || vList;
-  const ae = document.activeElement; const keep = ae && ae.id && ['sf_q', 'sf_y', 'note', 'fr_add', 'acc_u'].includes(ae.id) ? ae.id : null;
+  const ae = document.activeElement; const keep = ae && ae.id && ['sf_q', 'sf_y', 'note', 'fr_add', 'acc_u', 'fs_n', 'fs_c'].includes(ae.id) ? ae.id : null;
   if (mapObj) { try { mapObj.remove(); } catch (e) {} mapObj = null; }
   app.innerHTML = (location.protocol === 'file:' ? '<div style="background:#E8A317;color:#0B0B0C;text-align:center;font:700 12px var(--body);letter-spacing:2px;padding:6px">PODGLĄD Z DYSKU – NIE WERSJA OFICJALNA</div>' : '') + v()
-    + (ui.viewer ? vViewer() : '') + (ui.slides ? vSlides() : '');
-  document.body.style.overflow = ui.viewer || ui.slides ? 'hidden' : '';
+    + (ui.viewer ? vViewer() : '') + (ui.slides ? vSlides() : '') + (ui.songSheet ? vSongSheet() : '') + (ui.welcome ? vWelcome() : '');
+  document.body.style.overflow = ui.viewer || ui.slides || ui.welcome ? 'hidden' : '';
   if (keep) { const el = document.getElementById(keep); if (el) el.focus(); }
   hydratePhotos();
   if (ui.view === 'map') initMap();
@@ -1250,6 +1367,22 @@ const A = {
   cyear: v => { ui.cYear = Number(v); render(); },
   wyear: v => { ui.wYear = Number(v); render(); },
   add: () => { ui.form = null; go('add'); if (!ui.sf.searched || ui.sf.tab === 'day') search(1); },
+  fspick: v => { const p = ui.sf.fPick; p.has(v) ? p.delete(v) : p.add(v); render(); },
+  fsall: v => { const s = ui.sf, owned = new Set(db.concerts.map(c => c.setlistId).filter(Boolean));
+    const ids = s.fRes.filter(r => r.date === v && r.date <= today() && !owned.has(r.setlistId)).map(r => r.setlistId);
+    const all = ids.every(id => s.fPick.has(id)); ids.forEach(id => all ? s.fPick.delete(id) : s.fPick.add(id)); render(); },
+  fsadd: () => { const s = ui.sf, now = Date.now(); let n = 0;
+    s.fRes.filter(r => s.fPick.has(r.setlistId)).forEach((r, k) => { if (db.concerts.some(c => c.setlistId === r.setlistId)) return;
+      db.concerts.push({ id: uid(), ...r, festival: true, festName: s.fName.trim(), rating: 0, note: '', source: 'setlistfm', addedAt: now + k, mod: now + k, photos: [], rare: null }); n++; });
+    changed(); s.fPick = new Set(); ui.year = null; goTab('list'); toast(`Dodano ${n} ${pl(n, 'koncert', 'koncerty', 'koncertów')} z festiwalu!`); },
+  song: (v, t) => { ui.songSheet = { name: v, artist: t.dataset.artist || '' }; render(); },
+  songclose: () => { ui.songSheet = null; render(); },
+  accent: v => { db.settings.accent = v; save(); applyAccent(); render(); },
+  wnext: () => { ui.welcome.i++; render(); },
+  wskip: () => closeWelcome(),
+  wacc: () => { closeWelcome(); go('settings'); },
+  wadd: () => { closeWelcome(); A.add(); },
+  welcome: () => { ui.welcome = { i: 0 }; render(); },
   sftab: v => { ui.sf.tab = v; Object.assign(ui.sf, { results: [], total: 0, selected: null, searched: false, error: '', showUp: false }); if (v === 'day') search(1); else render(); },
   sfday: v => { ui.sf.dayOff = Number(v); ui.sf.dayDate = ''; ui.sf.showUp = false; search(1); },
   showup: () => { ui.sf.showUp = true; render(); },
@@ -1299,6 +1432,10 @@ app.addEventListener('input', e => {
   if (t.id === 'sf_q') ui.sf.q = t.value;
   if (t.id === 'sf_y') ui.sf.year = t.value;
   if (t.id === 'sf_c') ui.sf.country = t.value;
+  if (t.id === 'fs_n') ui.sf.fName = t.value;
+  if (t.id === 'fs_c') ui.sf.fCity = t.value;
+  if (t.id === 'fs_d') ui.sf.fStart = t.value;
+  if (t.id === 'fs_k') ui.sf.fDays = Number(t.value) || 1;
   if (t.id === 'sf_dc') { ui.sf.dayCountry = t.value; ui.sf.showUp = false; search(1); }
   if (t.id === 'sf_dd') { if (/^\d{4}-\d{2}-\d{2}$/.test(t.value)) { ui.sf.dayDate = t.value; ui.sf.showUp = false; search(1); } }
   if (t.id === 'sf_d') { ui.sf.date = t.value; const y = document.getElementById('sf_y'); if (y) { y.disabled = !!t.value; y.style.opacity = t.value ? '.4' : ''; } }
@@ -1311,6 +1448,7 @@ app.addEventListener('change', e => {
 app.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id === 'sfform') { search(1); return; }
+  if (e.target.id === 'festform') { searchFest(); return; }
   if (e.target.id === 'frform') { const v = document.getElementById('fr_add').value.trim(); if (!v) return;
     api('/friends', 'POST', { add: v }).then(() => { ui.frAdd = ''; ui.frMsg = `Wysłano zaproszenie do: ${v}. Gdy też Cię doda, zobaczycie swoje kolekcje.`; ui.frMsgErr = false; loadFriends(true); })
       .catch(err => { ui.frMsg = err.status === 0 ? 'Brak połączenia z serwerem.' : err.message; ui.frMsgErr = true; render(); });
@@ -1320,7 +1458,7 @@ app.addEventListener('submit', e => {
     const g = id => document.getElementById('f_' + id).value.trim();
     const artist = g('artist'), date = g('date');
     if (!artist || !/^\d{4}-\d{2}-\d{2}$/.test(date)) { document.getElementById('formerr').textContent = 'Podaj zespół i datę.'; return; }
-    const data = { artist, date, venue: g('venue'), city: g('city'), country: g('country').toUpperCase(), tour: g('tour'), festival: document.getElementById('f_fest').checked, songs: textToSongs(document.getElementById('f_songs').value) };
+    const data = { artist, date, venue: g('venue'), city: g('city'), country: g('country').toUpperCase(), tour: g('tour'), festival: document.getElementById('f_fest').checked, festName: g('festn'), songs: textToSongs(document.getElementById('f_songs').value) };
     let c;
     if (ui.form && ui.form.id) { c = byId(ui.form.id); Object.assign(c, data); touch(c); toast('Zapisano zmiany.'); }
     else { c = { id: uid(), setlistId: '', rating: 0, note: '', url: '', source: 'manual', addedAt: Date.now(), mod: Date.now(), ...data }; db.concerts.push(c); toast('Dodano do kolekcji!'); }
@@ -1331,9 +1469,11 @@ window.addEventListener('pagehide', save);
 let tx0 = null;
 app.addEventListener('touchstart', e => { if (ui.slides) tx0 = e.touches[0].clientX; }, { passive: true });
 app.addEventListener('touchend', e => { if (!ui.slides || tx0 === null) return; const dx = e.changedTouches[0].clientX - tx0; tx0 = null; if (Math.abs(dx) > 60) (dx < 0 ? A.slnext : A.slprev)(); }, { passive: true });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && (ui.slides || ui.viewer)) { ui.slides = null; ui.viewer = null; render(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && (ui.slides || ui.viewer || ui.songSheet)) { ui.slides = null; ui.viewer = null; ui.songSheet = null; render(); } });
 window.addEventListener('online', () => { if (auth) sync(); });
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && auth) { sync(); if (fr.loaded) loadFriends(true); } });
+applyAccent();
+try { if (!localStorage.getItem(WELCOME_KEY) && !db.concerts.length && !auth) ui.welcome = { i: 0 }; } catch (e) {}
 if (auth) setTimeout(sync, 300);
 setTimeout(backfill, 1500);
 if ('serviceWorker' in navigator && location.protocol === 'https:') { try { navigator.serviceWorker.register('./sw.js').catch(() => {}); } catch (e) {} }
